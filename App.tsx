@@ -4,9 +4,21 @@ import { MainContent } from './components/MainContent';
 import { GrainOverlay, CustomCursor } from './components/UIEffects';
 
 export default function App() {
-  const [hasEntered, setHasEntered] = useState(false);
+  // Initialize state based on sessionStorage to persist across reloads
+  const [hasEntered, setHasEntered] = useState(() => {
+    try {
+      return sessionStorage.getItem('niral_verse_entered') === 'true';
+    } catch (e) {
+      return false;
+    }
+  });
 
   const handleEnter = () => {
+    try {
+      sessionStorage.setItem('niral_verse_entered', 'true');
+    } catch (e) {
+      console.warn('Session storage not available');
+    }
     setHasEntered(true);
   };
 
