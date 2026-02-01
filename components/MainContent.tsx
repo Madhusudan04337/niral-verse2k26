@@ -4,7 +4,8 @@ import { ArrivalCutscene } from './transitions/ArrivalCutscene';
 import { DashboardSection } from './dashboard/DashboardSection';
 
 export const MainContent: React.FC = () => {
-  // Initialize state from storage
+  // Initialize state from storage to keep view continuity (e.g. Dashboard) if desired,
+  // but App.tsx ensures we start at Welcome Screen on refresh.
   const [viewState, setViewState] = useState<'command' | 'cutscene' | 'dashboard'>(() => {
     try {
       const saved = sessionStorage.getItem('niral_main_view');

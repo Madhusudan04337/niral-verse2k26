@@ -38,6 +38,7 @@ export const EventListItem: React.FC<{ event: typeof EVENTS_LIST[0]; index: numb
                <img 
                   src={event.banner} 
                   alt={event.title} 
+                  loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                />
                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
