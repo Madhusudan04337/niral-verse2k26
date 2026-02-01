@@ -12,6 +12,34 @@ export const EventZone: React.FC<{
 }> = ({ event, onEnterZone, onBack }) => {
    const [showContact, setShowContact] = useState(false);
 
+   const ContactOptions = () => (
+      <div className="space-y-3 animate-in fade-in slide-in-from-top-2">
+         <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-2">Select Channel</p>
+         <a 
+            href={`https://wa.me/${event.contact?.whatsapp || ''}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded transition-all flex items-center justify-center gap-2 cursor-hover text-sm"
+         >
+            <MessageCircle size={18} />
+            <span>WHATSAPP</span>
+         </a>
+         <a 
+            href={`tel:${event.contact?.phone || ''}`}
+            className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded transition-all flex items-center justify-center gap-2 cursor-hover text-sm"
+         >
+            <Phone size={18} />
+            <span>VOICE CALL</span>
+         </a>
+         <button 
+            onClick={() => setShowContact(false)}
+            className="text-xs text-gray-500 hover:text-white underline decoration-gray-500 cursor-hover"
+         >
+            Cancel
+         </button>
+      </div>
+   );
+
    return (
       <div className="relative w-full min-h-screen bg-black text-white">
          
@@ -22,14 +50,21 @@ export const EventZone: React.FC<{
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
             
+            {/* Back Button: Mobile (Left, Icon Only) / Desktop (Right, Icon + Text) */}
             <button 
                onClick={onBack}
-               className="absolute top-6 right-6 z-20 flex items-center space-x-2 text-white/80 hover:text-white bg-black/40 px-4 py-2 rounded-full backdrop-blur-md border border-white/10 hover:border-cyan-500 transition-all cursor-hover"
+               className="absolute top-6 left-6 md:left-auto md:right-6 z-20 flex items-center space-x-2 text-white/80 hover:text-white bg-black/40 px-3 py-3 md:px-4 md:py-2 rounded-full backdrop-blur-md border border-white/10 hover:border-cyan-500 transition-all cursor-hover"
             >
                <ArrowLeft size={18} />
                <span className="text-sm font-mono uppercase hidden md:inline">Return to Deck</span>
-               <span className="md:hidden text-sm">Back</span>
             </button>
+
+            {/* Mobile Avatar: Top Right */}
+            <div className="absolute top-6 right-6 md:hidden z-20">
+               <div className="w-16 h-16 rounded-full border border-cyan-500 p-0.5 bg-black/40 backdrop-blur-md shadow-[0_0_10px_cyan]">
+                  <img src={event.npc.avatar} alt={event.npc.name} className="w-full h-full rounded-full bg-gray-800" />
+               </div>
+            </div>
 
             <div className="absolute bottom-0 left-0 w-full p-6 md:p-8">
                <div className="max-w-4xl mx-auto">
@@ -105,6 +140,25 @@ export const EventZone: React.FC<{
                      </div>
                   </div>
 
+                  {/* Mobile Only: Contacts Section (Before Registration) */}
+                  <div className="md:hidden glass-panel border border-cyan-500/30 p-6 rounded-xl bg-white/5">
+                     <h4 className="text-white font-bold font-orbitron text-lg mb-1">{event.npc.name}</h4>
+                     <p className="text-cyan-500 text-xs font-mono uppercase mb-4">{event.npc.role}</p>
+                     
+                     {!showContact ? (
+                        <button 
+                           onClick={() => setShowContact(true)}
+                           className="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold rounded transition-all flex items-center justify-center gap-2 group cursor-hover text-sm"
+                        >
+                           <Radio size={18} />
+                           <span>ESTABLISH COMMS</span>
+                           <ArrowDown size={14} className="group-hover:translate-y-1 transition-transform" />
+                        </button>
+                     ) : (
+                        <ContactOptions />
+                     )}
+                  </div>
+
                   {/* Bottom Registration Button */}
                   <div className="mt-8 pt-8 border-t border-white/10">
                      <button 
@@ -120,7 +174,8 @@ export const EventZone: React.FC<{
                   </div>
                </div>
 
-               <div className="md:col-span-1">
+               {/* Desktop Only: NPC/Contact Card (Right Column) */}
+               <div className="hidden md:block md:col-span-1">
                   <div className="sticky top-6">
                      <div className="p-6 rounded-xl glass-panel border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.1)] text-center relative overflow-hidden bg-white/5">
                         <div className="w-20 h-20 mx-auto rounded-full border-2 border-cyan-500 p-1 mb-4">
@@ -139,31 +194,7 @@ export const EventZone: React.FC<{
                               <ArrowDown size={14} className="group-hover:translate-y-1 transition-transform" />
                            </button>
                         ) : (
-                           <div className="space-y-3 animate-in fade-in slide-in-from-top-2">
-                              <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-2">Select Channel</p>
-                              <a 
-                                 href={`https://wa.me/${event.contact?.whatsapp || ''}`}
-                                 target="_blank"
-                                 rel="noopener noreferrer"
-                                 className="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded transition-all flex items-center justify-center gap-2 cursor-hover text-sm"
-                              >
-                                 <MessageCircle size={18} />
-                                 <span>WHATSAPP</span>
-                              </a>
-                              <a 
-                                 href={`tel:${event.contact?.phone || ''}`}
-                                 className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded transition-all flex items-center justify-center gap-2 cursor-hover text-sm"
-                              >
-                                 <Phone size={18} />
-                                 <span>VOICE CALL</span>
-                              </a>
-                              <button 
-                                 onClick={() => setShowContact(false)}
-                                 className="text-xs text-gray-500 hover:text-white underline decoration-gray-500 cursor-hover"
-                              >
-                                 Cancel
-                              </button>
-                           </div>
+                           <ContactOptions />
                         )}
                      </div>
                   </div>
