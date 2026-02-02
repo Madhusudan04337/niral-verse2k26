@@ -77,14 +77,10 @@ export const EventZone: React.FC<{
                         href={event.rulebook}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center space-x-2 text-xs font-bold text-orange-400 hover:text-orange-300 transition-colors uppercase tracking-widest group/link"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 hover:border-orange-500 rounded transition-all group cursor-hover w-fit"
                      >
-                        <div className="p-1.5 rounded bg-orange-500/10 border border-orange-500/30 group-hover/link:bg-orange-500/20 transition-colors">
-                           <FileText size={14} />
-                        </div>
-                        <span className="border-b border-orange-500/30 pb-0.5 group-hover/link:border-orange-500 transition-colors">
-                           Download Mission Protocols (Rulebook)
-                        </span>
+                        <FileText size={16} className="text-orange-400 group-hover:scale-110 transition-transform" />
+                        <span className="text-orange-400 text-xs font-bold font-mono uppercase tracking-widest">RULES</span>
                      </a>
                   </div>
 

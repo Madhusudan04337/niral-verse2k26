@@ -176,7 +176,7 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
        <div className="fixed inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#172554] via-[#050505] to-[#000000] pointer-events-none opacity-40" />
 
        {/* Overlays */}
-       {isTraveling && <TravelSequence onComplete={handleTravelComplete} />}
+       {isTraveling && <TravelSequence onComplete={handleTravelComplete} eventId={activeEventId} />}
        
        {showNpc && activeEvent && (
          <NPCModal 
@@ -215,13 +215,13 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
              <CustomScrollbar />
 
              {/* Header */}
-             <header className="flex justify-between items-center p-4 md:p-12 border-b border-white/10 relative z-10 bg-black/60 backdrop-blur-xl sticky top-0 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
+             <header className="fixed top-0 left-0 w-full flex justify-between items-center py-6 px-5 md:py-8 md:px-12 border-b border-white/10 z-50 bg-black/90 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-all duration-300">
                <div className="flex items-center space-x-3 md:space-x-4">
                  <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center backdrop-blur-md border ${headerIconBg} ${headerIconBorder} ${headerIconColor}`}>
                    <HeaderIcon size={20} className="md:w-7 md:h-7" />
                  </div>
                  <div>
-                   <h2 className={`text-lg md:text-3xl font-orbitron font-bold tracking-wide uppercase ${selectedCategory ? headerIconColor : 'text-white'}`}>
+                   <h2 className={`text-lg md:text-3xl font-orbitron font-bold tracking-wide uppercase mb-1 ${selectedCategory ? headerIconColor : 'text-white'}`}>
                       {headerTitle}
                    </h2>
                    <p className="text-gray-500 text-[10px] md:text-xs font-mono uppercase tracking-widest">{headerSubtitle}</p>
@@ -258,7 +258,7 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
                </div>
              </header>
 
-             <div className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-12 relative z-10 flex flex-col justify-center">
+             <div className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-6 pt-32 md:pt-48 pb-12 relative z-10 flex flex-col justify-center">
                
                {/* View 2: Category Selection (Tech vs Non-Tech) */}
                {!selectedCategory && (
