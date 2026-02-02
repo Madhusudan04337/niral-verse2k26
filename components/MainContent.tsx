@@ -75,10 +75,11 @@ export const MainContent: React.FC = () => {
       {viewState === 'dashboard' && (
         <div ref={dashboardRef}>
            <DashboardSection onBackToHome={() => {
-              // This prop is now primarily for the UI button
-              // We prefer history.back() if history exists, 
-              // but explicit state set is fallback.
-              window.history.back();
+              // Force navigation to command view
+              setViewState('command');
+              // Using pushState ensures we have a valid history entry to return to dashboard via forward
+              // and standardizes the navigation flow
+              window.history.pushState({ view: 'command' }, '');
            }} />
         </div>
       )}

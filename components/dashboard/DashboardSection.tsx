@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Calendar, Cpu, Gamepad2, ArrowLeft, Music 
+  Calendar, Cpu, Gamepad2, ArrowLeft
 } from 'lucide-react';
 import { EVENTS_LIST } from '../data/events';
 import { CustomScrollbar } from '../ui/CustomScrollbar';
@@ -143,6 +143,11 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
      setShowForm(true);
   };
 
+  const handleConfirmYesLogic = () => {
+     setShowConfirm(false);
+     setShowForm(true);
+  };
+
   const showEventView = activeEventId !== null && !isTraveling;
   const showListView = selectedCategory !== null && !showEventView;
 
@@ -189,7 +194,7 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
        {showConfirm && activeEvent && (
          <RegistrationConfirmModal 
             eventName={activeEvent.title}
-            onConfirm={handleConfirmYes}
+            onConfirm={handleConfirmYesLogic}
             onCancel={() => setShowConfirm(false)}
          />
        )}
@@ -248,7 +253,7 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
                        </button>
                    ) : (
                        <button 
-                         onClick={() => window.history.back()}
+                         onClick={onBackToHome}
                          className="flex items-center space-x-2 text-gray-400 hover:text-cyan-400 transition-colors cursor-hover group"
                        >
                          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
@@ -280,9 +285,6 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
                         <div className="absolute inset-0 bg-gradient-to-t from-cyan-950/90 via-transparent to-transparent opacity-90" />
                         
                         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
-                           <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-cyan-500/10 border border-cyan-500/50 flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 group-hover:bg-cyan-500/20 transition-all duration-500 backdrop-blur-sm shadow-[0_0_30px_rgba(6,182,212,0.3)]">
-                              <Cpu className="w-6 h-6 md:w-8 md:h-8 text-cyan-400" />
-                           </div>
                            <h2 className="text-2xl md:text-5xl font-orbitron font-black text-white mb-2 md:mb-4 tracking-tight group-hover:text-cyan-400 transition-colors drop-shadow-lg">
                               TECHNICAL
                            </h2>
@@ -314,9 +316,6 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
                         <div className="absolute inset-0 bg-gradient-to-t from-blue-950/90 via-transparent to-transparent opacity-90" />
                         
                         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
-                           <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-blue-500/10 border border-blue-500/50 flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 group-hover:bg-blue-500/20 transition-all duration-500 backdrop-blur-sm shadow-[0_0_30px_rgba(59,130,246,0.3)]">
-                              <Music className="w-6 h-6 md:w-8 md:h-8 text-blue-400" />
-                           </div>
                            <h2 className="text-2xl md:text-5xl font-orbitron font-black text-white mb-2 md:mb-4 tracking-tight group-hover:text-blue-400 transition-colors drop-shadow-lg">
                               NON-TECHNICAL
                            </h2>
