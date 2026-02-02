@@ -216,19 +216,19 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
 
              {/* Header */}
              <header className="fixed top-0 left-0 w-full flex justify-between items-center py-6 px-5 md:py-8 md:px-12 border-b border-white/10 z-50 bg-black/90 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-all duration-300">
-               <div className="flex items-center space-x-3 md:space-x-4">
-                 <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center backdrop-blur-md border ${headerIconBg} ${headerIconBorder} ${headerIconColor}`}>
+               <div className="flex items-center space-x-3 md:space-x-4 min-w-0">
+                 <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center backdrop-blur-md border ${headerIconBg} ${headerIconBorder} ${headerIconColor} shrink-0`}>
                    <HeaderIcon size={20} className="md:w-7 md:h-7" />
                  </div>
-                 <div>
-                   <h2 className={`text-lg md:text-3xl font-orbitron font-bold tracking-wide uppercase mb-1 ${selectedCategory ? headerIconColor : 'text-white'}`}>
+                 <div className="min-w-0 flex-1">
+                   <h2 className={`text-sm sm:text-xl md:text-3xl font-orbitron font-bold tracking-wide uppercase mb-1 whitespace-nowrap overflow-hidden text-ellipsis ${selectedCategory ? headerIconColor : 'text-white'}`}>
                       {headerTitle}
                    </h2>
-                   <p className="text-gray-500 text-[10px] md:text-xs font-mono uppercase tracking-widest">{headerSubtitle}</p>
+                   <p className="text-gray-500 text-[10px] md:text-xs font-mono uppercase tracking-widest truncate">{headerSubtitle}</p>
                  </div>
                </div>
                
-               <div className="flex items-center gap-4">
+               <div className="flex items-center gap-4 shrink-0 pl-4">
                    {/* Encryption Status (visible only on desktop root view) */}
                    {!showListView && (
                      <div className="hidden md:flex items-center space-x-4 border-r border-white/10 pr-4 mr-2">
