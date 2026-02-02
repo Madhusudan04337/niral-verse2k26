@@ -4,8 +4,7 @@ import { ArrivalCutscene } from './transitions/ArrivalCutscene';
 import { DashboardSection } from './dashboard/DashboardSection';
 
 export const MainContent: React.FC = () => {
-  // Initialize state from storage to keep view continuity (e.g. Dashboard) if desired,
-  // but App.tsx ensures we start at Welcome Screen on refresh.
+  // Initialize state from storage to keep view continuity
   const [viewState, setViewState] = useState<'command' | 'cutscene' | 'dashboard'>(() => {
     try {
       const saved = sessionStorage.getItem('niral_main_view');
@@ -19,7 +18,7 @@ export const MainContent: React.FC = () => {
 
   const dashboardRef = useRef<HTMLDivElement>(null);
 
-  // Persist state changes
+  // Sync state to Session Storage
   useEffect(() => {
     try {
       sessionStorage.setItem('niral_main_view', viewState);
@@ -28,8 +27,37 @@ export const MainContent: React.FC = () => {
     }
   }, [viewState]);
 
+  // Handle Browser History (Back Button / Gestures)
+  useEffect(() => {
+    // 1. Set initial history state if null
+    if (!window.history.state) {
+      window.history.replaceState({ view: viewState }, '');
+    }
+
+    // 2. Listen for PopState (Back/Forward)
+    const handlePopState = (event: PopStateEvent) => {
+      const state = event.state;
+      if (state && state.view) {
+        // Only handle root level view changes (command vs dashboard)
+        // Dashboard internal nav is handled by DashboardSection
+        if (state.view === 'command' || state.view === 'dashboard') {
+             setViewState(state.view);
+        }
+      } else {
+        // Fallback: If no state (e.g. going back to start), default to command
+        setViewState('command');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const handleCutsceneComplete = () => {
+    // Push new history state when entering dashboard
+    window.history.pushState({ view: 'dashboard' }, '');
     setViewState('dashboard');
+    
     // Allow DOM update then scroll
     setTimeout(() => {
       dashboardRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -46,7 +74,12 @@ export const MainContent: React.FC = () => {
       
       {viewState === 'dashboard' && (
         <div ref={dashboardRef}>
-           <DashboardSection onBackToHome={() => setViewState('command')} />
+           <DashboardSection onBackToHome={() => {
+              // This prop is now primarily for the UI button
+              // We prefer history.back() if history exists, 
+              // but explicit state set is fallback.
+              window.history.back();
+           }} />
         </div>
       )}
     </div>
