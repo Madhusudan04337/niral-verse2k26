@@ -2,6 +2,14 @@
 // In a real production environment, these could be local imports (e.g., import banner from './banner.jpg')
 // Since we are using a code sandbox, we are using persistent URLs.
 
+import gokulnath from './images/gokulnath.png';
+import viknesh from './images/viknesh.png';
+import sarath from './images/sarath.png';
+import jaaveed from './images/jaaveed.png';
+import sugin from './images/sugin.png';
+import antony from './images/antony.png';
+import madhusudan from './images/madhusudan.png';
+
 export const IMAGES = {
   // Dummy/Placeholder Profile Avatar
   DUMMY_AVATAR: "https://api.dicebear.com/9.x/avataaars/svg?seed=Felix",
@@ -20,13 +28,13 @@ export const IMAGES = {
   
   // NPC Avatars (can be overridden)
   NPCS: {
-    JAVEED: "https://api.dicebear.com/9.x/avataaars/svg?seed=Javeed&mouth=smile&eyebrows=default&clothing=blazerAndShirt&top=shortHair",
-    SARATH: "https://api.dicebear.com/9.x/avataaars/svg?seed=Sarath&clothing=graphicShirt&top=shortHair",
+    JAVEED: jaaveed,
+    SARATH: sarath,
     FOWZEEYA: "https://api.dicebear.com/9.x/avataaars/svg?seed=Fowzeeya&top=longHair&clothing=blazerAndShirt&hairColor=4a312c",
-    MADHUSUDAN: "https://api.dicebear.com/9.x/avataaars/svg?seed=Madhusudan&top=shortHair&facialHair=beardMedium&clothing=collarAndSweater",
-    GOKULNATH: "https://api.dicebear.com/9.x/avataaars/svg?seed=Gokulnath&top=shortHair&clothing=graphicShirt",
-    SUGIN: "https://api.dicebear.com/9.x/avataaars/svg?seed=Sugin&top=shortHair&accessories=sunglasses&clothing=hoodie",
-    VIKNESH: "https://api.dicebear.com/9.x/avataaars/svg?seed=Viknesh&top=shortHair&clothing=graphicShirt",
-    DIRECTOR: "https://api.dicebear.com/9.x/avataaars/svg?seed=Director&clothing=blazerAndShirt&top=shortHair&facialHair=beardMedium",
+    MADHUSUDAN: madhusudan,
+    GOKULNATH: gokulnath,
+    SUGIN: sugin,
+    VIKNESH: viknesh,
+    DIRECTOR: antony,
   }
 };
