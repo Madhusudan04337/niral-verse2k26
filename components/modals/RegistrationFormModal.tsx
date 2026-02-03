@@ -13,6 +13,9 @@ interface MemberData {
   year: string;
 }
 
+// REPLACE WITH YOUR DEPLOYED WEB APP URL
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYD8LKwtndNDsfOQCbm7zo2VYmE6VALIEvparxmbGc_f2q2lL6ARt1swgGYiA6U3jfAw/exec";
+
 export const RegistrationFormModal: React.FC<{
    event: typeof EVENTS_LIST[0];
    onClose: () => void;
@@ -25,17 +28,15 @@ export const RegistrationFormModal: React.FC<{
    const [teamName, setTeamName] = useState('');
    const [collegeName, setCollegeName] = useState('');
    
-   // Initialize members based on minimum required (or 1 if scalable)
+   // Initialize members
    const [members, setMembers] = useState<MemberData[]>(
       Array(event.minMembers).fill({ name: '', email: '', phone: '', course: '', year: '' })
    );
 
-   // Derived state for current mode (Single/Duo) if event allows variable size
    const [participationMode, setParticipationMode] = useState<'solo' | 'duo'>(
       event.minMembers === 1 && event.maxMembers === 2 ? 'solo' : 'solo'
    );
 
-   // Effect to update members array size when mode changes
    useEffect(() => {
       if (event.minMembers !== event.maxMembers) {
          const targetSize = participationMode === 'solo' ? 1 : 2;
@@ -43,12 +44,10 @@ export const RegistrationFormModal: React.FC<{
             setMembers(prev => {
                const newMembers = [...prev];
                if (targetSize > prev.length) {
-                  // Add members
                   for (let i = prev.length; i < targetSize; i++) {
                      newMembers.push({ name: '', email: '', phone: '', course: '', year: '' });
                   }
                } else {
-                  // Remove members
                   return newMembers.slice(0, targetSize);
                }
                return newMembers;
@@ -62,13 +61,16 @@ export const RegistrationFormModal: React.FC<{
       updatedMembers[index] = { ...updatedMembers[index], [field]: value };
       setMembers(updatedMembers);
       
-      // Clear error for this field when user types
+      // Clear specific error when user types
       if (errors[`members.${index}.${field}`]) {
          setErrors(prev => {
             const newErrors = { ...prev };
             delete newErrors[`members.${index}.${field}`];
             return newErrors;
          });
+      }
+      if (field === 'name' && errors.teamName) {
+         // optional UI cleanup logic
       }
    };
 
@@ -79,13 +81,10 @@ export const RegistrationFormModal: React.FC<{
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const phoneRegex = /^[6-9]\d{9}$/;
 
-      // Team Name Validation
       if (event.maxMembers > 1 && !teamName.trim()) {
          newErrors['teamName'] = 'Team Name is required';
          isValid = false;
       }
-
-      // College Name Validation
       if (!collegeName.trim()) {
          newErrors['collegeName'] = 'College Name is required';
          isValid = false;
@@ -95,7 +94,6 @@ export const RegistrationFormModal: React.FC<{
       const seenPhones = new Set<string>();
 
       members.forEach((member, index) => {
-         // Name
          if (!member.name.trim()) {
             newErrors[`members.${index}.name`] = 'Name is required';
             isValid = false;
@@ -104,7 +102,6 @@ export const RegistrationFormModal: React.FC<{
              isValid = false;
          }
 
-         // Email
          if (!member.email.trim()) {
             newErrors[`members.${index}.email`] = 'Email is required';
             isValid = false;
@@ -118,7 +115,6 @@ export const RegistrationFormModal: React.FC<{
             seenEmails.add(member.email.toLowerCase());
          }
 
-         // Phone
          if (!member.phone.trim()) {
             newErrors[`members.${index}.phone`] = 'Phone is required';
             isValid = false;
@@ -132,13 +128,10 @@ export const RegistrationFormModal: React.FC<{
             seenPhones.add(member.phone);
          }
 
-         // Course
          if (!member.course.trim()) {
             newErrors[`members.${index}.course`] = 'Course is required';
             isValid = false;
          }
-
-         // Year
          if (!member.year) {
             newErrors[`members.${index}.year`] = 'Year is required';
             isValid = false;
@@ -153,7 +146,6 @@ export const RegistrationFormModal: React.FC<{
       e.preventDefault();
       
       if (!validateForm()) {
-         // Scroll to top or first error could be implemented here
          const firstErrorField = document.querySelector('.border-red-500');
          if (firstErrorField) {
             firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -165,25 +157,50 @@ export const RegistrationFormModal: React.FC<{
       
       const payload = {
         eventName: event.title,
-        teamName: event.maxMembers > 1 ? teamName : null,
+        teamName: event.maxMembers > 1 ? teamName : "Solo/Duo", 
         college: collegeName,
         members: members
       };
 
       try {
-        await fetch('/api/register', {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
             body: JSON.stringify(payload),
         });
-        
-        setIsSuccess(true);
+
+        const result = await response.json();
+
+        if (result.result === "success") {
+           setIsSuccess(true);
+        } else {
+           // --- UPDATED ERROR HANDLING ---
+           // The backend now returns a list of errors: [{ field: "teamName", message: "..." }, ...]
+           if (result.errors && Array.isArray(result.errors)) {
+               const backendErrors: Record<string, string> = {};
+               
+               // Map backend errors to our state keys
+               result.errors.forEach((err: any) => {
+                   backendErrors[err.field] = err.message;
+               });
+
+               setErrors(prev => ({...prev, ...backendErrors}));
+
+               // Auto-scroll to the first error
+               setTimeout(() => {
+                   const firstErrorField = document.querySelector('.border-red-500, .text-red-400');
+                   if (firstErrorField) {
+                       firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                   }
+               }, 100);
+           } else if (result.message) {
+               // Fallback for generic errors
+               alert("REGISTRATION FAILED:\n" + result.message);
+           }
+        }
+
       } catch (error) {
         console.error("Registration failed", error);
-        // Fallback to success for demo purposes since we don't have a real backend
-        setIsSuccess(true); 
+        alert("System Error: Unable to connect to mainframe. Please try again.");
       } finally {
         setIsSubmitting(false);
       }
