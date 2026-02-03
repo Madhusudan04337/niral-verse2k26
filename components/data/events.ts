@@ -22,9 +22,9 @@ export const EVENTS_LIST = [
     rulebook: "/assets/rulebooks/bug_hunt.pdf",
     contact: { phone: "+919943086228", whatsapp: "+919943086228" },
     npc: { 
-      name: "Mr. Javeed", 
+      name: "Mr. Jaaveed", 
       role: "Event Head", 
-      avatar: IMAGES.NPCS.JAVEED, 
+      avatar: IMAGES.NPCS.JAAVEED, 
       dialogue: "The code is bleeding, Agent. I need you to patch those vulnerabilities before the system crashes." 
     }
   },
@@ -183,9 +183,9 @@ export const EVENTS_LIST = [
     rulebook: "/assets/rulebooks/corporate_walk.pdf",
     contact: { phone: "", whatsapp: "" },
     npc: { 
-      name: "Director", 
-      role: "Executive", 
-      avatar: IMAGES.NPCS.DIRECTOR, 
+      name: "Mr. Antony", 
+      role: "Event Head", 
+      avatar: IMAGES.NPCS.ANTONY, 
       dialogue: "Time is money. Impress me in the next 30 seconds, or get out of my office." 
     }
   },
