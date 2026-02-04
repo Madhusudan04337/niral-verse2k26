@@ -1,11 +1,11 @@
-import gokulnath from './images/gokulnath.png';
-import viknesh from './images/viknesh.png';
-import sarath from './images/sarath.png';
-import jaaveed from './images/jaaveed.png';
+import gokulnath from './images/gokulnath.jpeg';
+import viknesh from './images/viknesh.jpeg';
+import sarath from './images/sarath.jpeg';
+import jaaveed from './images/jaaveed.jpeg';
 import sugin from './images/sugin.png';
-import antony from './images/antony.png';
-import madhusudan from './images/madhusudan.png';   
-
+import antony from './images/antony.jpeg';
+import madhusudan from './images/madhusudan.jpg';   
+import fowzeeya from './images/fowzeeya.jpeg';  
 
 export const IMAGES = {
   // Dummy/Placeholder Profile Avatar
@@ -27,6 +27,7 @@ export const IMAGES = {
   NPCS: {
     JAAVEED: jaaveed,
     SARATH: sarath,
+    FOWZEEYA: fowzeeya,
     MADHUSUDAN: madhusudan,
     GOKULNATH: gokulnath,
     SUGIN: sugin,

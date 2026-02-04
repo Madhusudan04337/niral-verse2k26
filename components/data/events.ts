@@ -13,9 +13,9 @@ export const EVENTS_LIST = [
     color: "text-red-400", 
     border: "group-hover:border-red-500", 
     shadow: "group-hover:shadow-red-500/50", 
-    desc: "Identify and neutralize system vulnerabilities.",
+    desc: "Identify and fix critical bugs in given programs under time pressure.",
     banner: IMAGES.BANNERS.BUG_HUNT,
-    fullDesc: "Dive into the mainframe and purge critical system errors. Competitors must identify security flaws in a simulated banking infrastructure within 60 minutes.",
+    fullDesc: "Step into a fast-paced debugging arena where participants must analyze, detect, and resolve errors in provided code within time limit. Accuracy, logical thinking, and speed will determine your rank on the leaderboard. The more bugs you eliminate, the higher you score.",
     minMembers: 1,
     maxMembers: 2,
     timing: "10:30 AM - 11:30 AM",
@@ -25,7 +25,7 @@ export const EVENTS_LIST = [
       name: "Mr. Jaaveed", 
       role: "Event Head", 
       avatar: IMAGES.NPCS.JAAVEED, 
-      dialogue: "The code is bleeding, Agent. I need you to patch those vulnerabilities before the system crashes." 
+      dialogue: "The system is unstable, Agent. Find the flaws, patch the code, and restore control before time runs out." 
     }
   },
   { 
@@ -82,9 +82,9 @@ export const EVENTS_LIST = [
     color: "text-blue-400", 
     border: "group-hover:border-blue-500", 
     shadow: "group-hover:shadow-blue-500/50", 
-    desc: "Optimize data flow across the global grid.",
+    desc: "Solve cyber-security and networking clues in a fast-paced technical crossword.",
     banner: IMAGES.BANNERS.NETIQ,
-    fullDesc: "The network is congested. You must re-route packets and optimize protocols to restore global communications.",
+    fullDesc: "Put your networking knowledge and cyber-security awareness to the test in this fun yet challenging crossword battle. Decode clues related to protocols, attacks, tools, and security concepts within the time limit. Speed, accuracy, and technical depth will determine the winners.",
     minMembers: 2,
     maxMembers: 2,
     timing: "01:30 PM - 02:30 PM",
@@ -94,7 +94,7 @@ export const EVENTS_LIST = [
       name: "Mr. Madhusudan", 
       role: "Event Head", 
       avatar: IMAGES.NPCS.MADHUSUDAN, 
-      dialogue: "Signal strength is at 15%. I need you to boost the grid nodes manually. Hurry." 
+      dialogue: "The grid is encrypted. Decode the clues, reconnect the network, and restore the signal before time expires."
     }
   },
   { 
@@ -105,9 +105,9 @@ export const EVENTS_LIST = [
     color: "text-blue-400", 
     border: "group-hover:border-blue-500", 
     shadow: "group-hover:shadow-blue-500/50", 
-    desc: "Design propaganda for the resistance.",
+    desc: "Create impactful posters that communicate powerful ideas visually.",
     banner: IMAGES.BANNERS.POSTER,
-    fullDesc: "Create visual assets to inspire the populace. The message is as powerful as the weapon.",
+    fullDesc: "Showcase your creativity and presentation skills by designing an engaging and meaningful poster. Participants must effectively convey their ideas through visuals, layout, and message clarity within the given time. Strong concepts and impactful designs score higher.",
     minMembers: 1,
     maxMembers: 2,
     timing: "10:30 AM - 11:30 AM",
@@ -117,7 +117,7 @@ export const EVENTS_LIST = [
       name: "Mr. Gokulnath", 
       role: "Event Head", 
       avatar: IMAGES.NPCS.GOKULNATH, 
-      dialogue: "The streets are silent. Wake them up with your art. Make it loud, make it bold." 
+      dialogue: "Your message is your power. Design with purpose, speak through visuals, and make it impossible to ignore" 
     }
   },
   { 
@@ -128,9 +128,9 @@ export const EVENTS_LIST = [
     color: "text-green-400", 
     border: "group-hover:border-green-500", 
     shadow: "group-hover:shadow-green-500/50", 
-    desc: "Engage in viral memetic warfare.",
+    desc: "Create a unique and hilarious meme from the given theme.",
     banner: IMAGES.BANNERS.MEME,
-    fullDesc: "Construct viral payloads to disrupt enemy morale. Humor is the ultimate trojan horse.",
+    fullDesc: "Put your creativity and humor to the test by designing an original meme based on the provided input. Clarity, wit, and relevance matter most. Offensive, inappropriate, or duplicated content will be rejected immediately. Make it funny, make it smart, and stand out.",
     minMembers: 2,
     maxMembers: 2,
     timing: "11:30 AM - 12:30 PM",
@@ -140,7 +140,7 @@ export const EVENTS_LIST = [
       name: "Mr. Sugin", 
       role: "Event Head", 
       avatar: IMAGES.NPCS.SUGIN, 
-      dialogue: "Top kek. Upload the payload. If they aren't laughing, we aren't winning." 
+      dialogue: "Make it clever. Make it viral. Only the sharpest humor survives. 😎🔥"
     }
   },
   { 
@@ -151,9 +151,9 @@ export const EVENTS_LIST = [
     color: "text-cyan-400", 
     border: "group-hover:border-cyan-500", 
     shadow: "group-hover:shadow-cyan-500/50", 
-    desc: "Combat simulation and tactical training.",
+    desc: "4v4 Free Fire squad battles testing teamwork and reflexes.",
     banner: IMAGES.BANNERS.GAMING,
-    fullDesc: "Enter the arena. FPS, MOBA, and Battle Royale simulations to test your reflexes and strategic thinking.",
+    fullDesc: "Step into the Gaming Zone for intense 4v4 Free Fire squad matches. Compete in fast-paced battles that challenge your coordination, strategy, and combat skills. Work as a team, dominate the arena, and prove your squad is unstoppable.",
     minMembers: 4,
     maxMembers: 4,
     timing: "10:00 AM Onwards",
@@ -163,7 +163,7 @@ export const EVENTS_LIST = [
       name: "Mr. Viknesh", 
       role: "Event Head", 
       avatar: IMAGES.NPCS.VIKNESH, 
-      dialogue: "1v1 me, recruit. Let's see if your aim is as good as your talk." 
+      dialogue: "Squad up. Strategy ready. Victory belongs to the team that fights together." 
     }
   },
   { 

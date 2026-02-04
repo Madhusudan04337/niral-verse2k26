@@ -367,7 +367,7 @@ export const CommandDeckHero: React.FC<CommandDeckHeroProps> = ({ onInitiateDrop
                     <div className="font-mono text-base text-cyan-100/90 leading-relaxed bg-black/20 p-6 rounded h-32 flex flex-col justify-center items-center text-center border border-white/5 relative overflow-hidden group">
                          <div className="absolute inset-0 bg-cyan-500/5 group-hover:bg-cyan-500/10 transition-colors" />
                          <p className="font-bold text-white mb-2 tracking-wide relative z-10">DEPARTMENT OF<br/>COMPUTER APPLICATIONS</p>
-                         <p className="text-cyan-400 font-orbitron tracking-widest text-sm relative z-10 border-t border-cyan-500/30 pt-2 mt-1 w-full">BCA (SUNSTONE)</p>
+                         <p className="text-cyan-400 font-orbitron tracking-widest text-sm relative z-10 border-t border-cyan-500/30 pt-2 mt-1 w-full">BCA & MCA</p>
                     </div>
                 </HudPanel>
             </div>
