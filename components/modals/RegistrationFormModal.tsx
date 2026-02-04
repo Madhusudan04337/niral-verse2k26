@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Target, X, Users2, Building, User, Mail, Phone, BookOpen, GraduationCap, 
-  Loader2, Zap, CheckCircle2, AlertCircle 
+  Loader2, Zap, CheckCircle2, AlertCircle, ShieldCheck, Lock, RefreshCw, Timer
 } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import { EVENTS_LIST } from '../data/events';
 
 interface MemberData {
@@ -16,26 +17,60 @@ interface MemberData {
 // REPLACE WITH YOUR DEPLOYED WEB APP URL
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYD8LKwtndNDsfOQCbm7zo2VYmE6VALIEvparxmbGc_f2q2lL6ARt1swgGYiA6U3jfAw/exec";
 
+// EMAILJS CONFIG
+const EMAILJS_SERVICE_ID = "service_0r5787t";
+const EMAILJS_OTP_TEMPLATE_ID = "template_dl8fvcn";
+const EMAILJS_REG_TEMPLATE_ID = "template_0f0sytn";
+const EMAILJS_PUBLIC_KEY = "urCXzIu8mEl1xXFu1";
+
 export const RegistrationFormModal: React.FC<{
    event: typeof EVENTS_LIST[0];
    onClose: () => void;
 }> = ({ event, onClose }) => {
+   // UI States
+   const [currentStep, setCurrentStep] = useState<'form' | 'otp' | 'success'>('form');
    const [isSubmitting, setIsSubmitting] = useState(false);
-   const [isSuccess, setIsSuccess] = useState(false);
    const [errors, setErrors] = useState<Record<string, string>>({});
    
+   // OTP State
+   const [generatedOtp, setGeneratedOtp] = useState('');
+   const [userOtp, setUserOtp] = useState('');
+   const [otpError, setOtpError] = useState('');
+   const [timer, setTimer] = useState(0);
+
    // Form State
    const [teamName, setTeamName] = useState('');
    const [collegeName, setCollegeName] = useState('');
    
-   // Initialize members
-   const [members, setMembers] = useState<MemberData[]>(
-      Array(event.minMembers).fill({ name: '', email: '', phone: '', course: '', year: '' })
+   // Initialize members with unique objects
+   const [members, setMembers] = useState<MemberData[]>(() => 
+      Array.from({ length: event.minMembers }, () => ({ 
+         name: '', email: '', phone: '', course: '', year: '' 
+      }))
    );
 
    const [participationMode, setParticipationMode] = useState<'solo' | 'duo'>(
       event.minMembers === 1 && event.maxMembers === 2 ? 'solo' : 'solo'
    );
+
+   // Initialize EmailJS
+   useEffect(() => {
+       try {
+           emailjs.init(EMAILJS_PUBLIC_KEY);
+       } catch (e) {
+           console.warn("EmailJS init warning:", e);
+       }
+   }, []);
+
+   // Robust Timer Countdown Effect using setTimeout
+   useEffect(() => {
+      if (currentStep === 'otp' && timer > 0) {
+         const timerId = setTimeout(() => {
+            setTimer(prev => prev - 1);
+         }, 1000);
+         return () => clearTimeout(timerId);
+      }
+   }, [currentStep, timer]);
 
    useEffect(() => {
       if (event.minMembers !== event.maxMembers) {
@@ -142,7 +177,37 @@ export const RegistrationFormModal: React.FC<{
       return isValid;
    };
 
-   const handleSubmit = async (e: React.FormEvent) => {
+   const generateAndSendOtp = async () => {
+       const code = Math.floor(100000 + Math.random() * 900000).toString();
+       setGeneratedOtp(code);
+       
+       console.log(`[DEV MODE] Generated OTP: ${code}`);
+
+       const teamLeader = members[0];
+       
+       // CLEAN EMAIL PARAMS
+       // Ensure your EmailJS template uses {{otp}} variable
+       const emailParams = {
+          to_name: teamLeader.name,
+          to_email: teamLeader.email,
+          otp: code,
+          event_name: event.title,
+          message: code // Backup variable often used in default templates
+       };
+       
+       console.log("Sending OTP with params:", emailParams);
+       
+       await emailjs.send(
+           EMAILJS_SERVICE_ID,
+           EMAILJS_OTP_TEMPLATE_ID,
+           emailParams
+       );
+
+       setTimer(60); // Reset timer to 60 seconds
+   };
+
+   // STEP 1: Send OTP (Initial)
+   const handleInitiateOtp = async (e: React.FormEvent) => {
       e.preventDefault();
       
       if (!validateForm()) {
@@ -150,6 +215,45 @@ export const RegistrationFormModal: React.FC<{
          if (firstErrorField) {
             firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
          }
+         return;
+      }
+
+      setIsSubmitting(true);
+
+      try {
+         await generateAndSendOtp();
+         setCurrentStep('otp');
+      } catch (error: any) {
+         console.error("Failed to send OTP", error);
+         
+         const errorText = error?.text || error?.message || "Network Error";
+         alert(`EMAIL FAILED (${errorText}).\n\nCHECK CONSOLE FOR OTP.`);
+         setCurrentStep('otp');
+      } finally {
+         setIsSubmitting(false);
+      }
+   };
+
+   // Resend Logic
+   const handleResendOtp = async () => {
+       if (timer > 0) return;
+       setIsSubmitting(true);
+       try {
+           await generateAndSendOtp();
+       } catch (error: any) {
+           console.error("Failed to resend OTP", error);
+           alert("Failed to resend email.");
+       } finally {
+           setIsSubmitting(false);
+       }
+   };
+
+   // STEP 2: Verify OTP and Final Submit
+   const handleVerifyAndSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      
+      if (userOtp !== generatedOtp) {
+         setOtpError("INVALID ACCESS CODE");
          return;
       }
 
@@ -171,42 +275,54 @@ export const RegistrationFormModal: React.FC<{
         const result = await response.json();
 
         if (result.result === "success") {
-           setIsSuccess(true);
+           // --- SEND FINAL CONFIRMATION EMAIL ---
+           try {
+              const teamLeader = members[0];
+              const emailParams = {
+                 to_name: teamLeader.name,
+                 to_email: teamLeader.email,
+                 event_name: event.title,
+                 team_name: event.maxMembers > 1 ? teamName : "Solo Participant",
+                 members_list: members.map((m, i) => 
+                     `${i + 1}. ${m.name} (${m.course}, ${m.year} Year)`
+                 ).join('\n')
+              };
+
+              await emailjs.send(
+                 EMAILJS_SERVICE_ID,
+                 EMAILJS_REG_TEMPLATE_ID,
+                 emailParams
+              );
+           } catch (emailErr) {
+              console.warn("Failed to send confirmation email:", emailErr);
+           }
+
+           setCurrentStep('success');
         } else {
-           // --- UPDATED ERROR HANDLING ---
-           // The backend now returns a list of errors: [{ field: "teamName", message: "..." }, ...]
            if (result.errors && Array.isArray(result.errors)) {
                const backendErrors: Record<string, string> = {};
-               
-               // Map backend errors to our state keys
                result.errors.forEach((err: any) => {
                    backendErrors[err.field] = err.message;
                });
-
                setErrors(prev => ({...prev, ...backendErrors}));
-
-               // Auto-scroll to the first error
-               setTimeout(() => {
-                   const firstErrorField = document.querySelector('.border-red-500, .text-red-400');
-                   if (firstErrorField) {
-                       firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                   }
-               }, 100);
+               setCurrentStep('form');
            } else if (result.message) {
-               // Fallback for generic errors
                alert("REGISTRATION FAILED:\n" + result.message);
+               setCurrentStep('form');
            }
         }
 
       } catch (error) {
         console.error("Registration failed", error);
-        alert("System Error: Unable to connect to mainframe. Please try again.");
+        alert("System Error: Unable to connect to mainframe.");
+        setCurrentStep('form');
       } finally {
         setIsSubmitting(false);
       }
    };
 
-   if (isSuccess) {
+   // SUCCESS VIEW
+   if (currentStep === 'success') {
       return (
          <div className="fixed inset-0 z-[500] flex items-center justify-center p-4 animate-in zoom-in-95 duration-200">
             <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
@@ -217,6 +333,10 @@ export const RegistrationFormModal: React.FC<{
                <h3 className="text-2xl font-orbitron font-bold text-white mb-2">REGISTRATION COMPLETE</h3>
                <p className="text-gray-400 mb-6">
                   Mission protocols accepted. Your unit has been registered in the mainframe.
+                  <br/>
+                  <span className="text-xs text-cyan-400/70 mt-2 block">
+                     Confirmation protocol sent to {members[0].email}
+                  </span>
                </p>
                <button 
                   onClick={onClose}
@@ -229,6 +349,81 @@ export const RegistrationFormModal: React.FC<{
       );
    }
 
+   // OTP VIEW
+   if (currentStep === 'otp') {
+      return (
+        <div className="fixed inset-0 z-[500] flex items-center justify-center p-4 animate-in zoom-in-95 duration-200">
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={() => setCurrentStep('form')} />
+            
+            <div className="glass-panel relative w-full max-w-md bg-gray-900/90 rounded-xl p-8 text-center shadow-[0_0_50px_rgba(0,240,255,0.2)] border border-cyan-500/30">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 via-white to-cyan-500 animate-pulse" />
+                
+                <div className="w-16 h-16 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-cyan-500/30">
+                    <ShieldCheck className="w-8 h-8 text-cyan-400" />
+                </div>
+                
+                <h3 className="text-2xl font-orbitron font-bold text-white mb-2 tracking-wide">SECURITY CHECK</h3>
+                <p className="text-gray-400 text-sm font-mono mb-6">
+                    A verification protocol has been sent to <br/>
+                    <span className="text-cyan-400">{members[0].email}</span>.
+                </p>
+
+                <div className="mb-6 relative">
+                    <input 
+                        type="text" 
+                        value={userOtp}
+                        onChange={(e) => {
+                            setUserOtp(e.target.value.replace(/[^0-9]/g, '').slice(0, 6));
+                            setOtpError('');
+                        }}
+                        className={`w-full bg-black/50 border-2 rounded-lg py-3 text-center text-2xl font-mono tracking-[0.5em] text-white focus:outline-none transition-all ${otpError ? 'border-red-500 animate-pulse' : 'border-cyan-500/50 focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(0,240,255,0.2)]'}`}
+                        placeholder="000000"
+                        autoFocus
+                    />
+                    {otpError && <p className="text-red-400 text-xs font-mono mt-2 flex items-center justify-center gap-1"><AlertCircle size={12} /> {otpError}</p>}
+                </div>
+                
+                <div className="flex items-center justify-between mb-6 bg-black/20 p-3 rounded border border-white/5">
+                    <div className="flex items-center gap-2 text-sm font-mono text-gray-400">
+                        <Timer size={16} className={timer > 0 ? "text-cyan-400 animate-pulse" : "text-gray-600"} />
+                        <span className={timer > 0 ? "text-cyan-400 font-bold" : "text-gray-600"}>
+                            {timer > 0 ? `EXPIRES IN ${String(timer).padStart(2, '0')}s` : "EXPIRED"}
+                        </span>
+                    </div>
+
+                    <button
+                        onClick={handleResendOtp}
+                        disabled={timer > 0 || isSubmitting}
+                        className={`flex items-center gap-2 text-xs font-mono transition-colors uppercase tracking-wider ${
+                           timer > 0 ? 'text-gray-600 cursor-not-allowed opacity-50' : 'text-cyan-400 hover:text-white cursor-pointer hover:underline'
+                        }`}
+                    >
+                       <RefreshCw size={12} className={isSubmitting ? "animate-spin" : ""} />
+                       {isSubmitting ? "SENDING..." : "RESEND CODE"}
+                    </button>
+                </div>
+
+                <button 
+                    onClick={handleVerifyAndSubmit}
+                    disabled={isSubmitting}
+                    className="w-full py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold font-orbitron uppercase tracking-widest rounded transition-all disabled:opacity-50 disabled:cursor-wait flex items-center justify-center space-x-2 cursor-hover mb-3 shadow-[0_0_20px_rgba(6,182,212,0.3)]"
+                >
+                    {isSubmitting ? <Loader2 className="animate-spin" size={18} /> : <Lock size={18} />}
+                    <span>{isSubmitting ? "VERIFYING..." : "AUTHENTICATE"}</span>
+                </button>
+
+                <button 
+                    onClick={() => setCurrentStep('form')}
+                    className="text-gray-500 hover:text-white text-xs font-mono underline cursor-hover"
+                >
+                    Incorrect Email? Return to Form
+                </button>
+            </div>
+        </div>
+      );
+   }
+
+   // FORM VIEW
    return (
       <div className="fixed inset-0 z-[500] flex items-center justify-center p-4 animate-in zoom-in-95 duration-200">
          <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} />
@@ -254,7 +449,7 @@ export const RegistrationFormModal: React.FC<{
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+            <form onSubmit={handleInitiateOtp} className="flex-1 overflow-y-auto p-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   
                   {/* Left Column: Team Details */}
@@ -445,14 +640,14 @@ export const RegistrationFormModal: React.FC<{
                   ENCRYPTION: AES-256-GCM <span className="text-green-500 ml-2">ACTIVE</span>
                </div>
                <button 
-                  onClick={(e) => handleSubmit(e as any)}
+                  onClick={(e) => handleInitiateOtp(e as any)}
                   disabled={isSubmitting}
                   className="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold font-orbitron uppercase tracking-widest rounded transition-all disabled:opacity-50 disabled:cursor-wait relative overflow-hidden flex items-center justify-center space-x-2 cursor-hover"
                >
                   {isSubmitting ? (
                      <>
                         <Loader2 className="animate-spin" size={18} />
-                        <span>TRANSMITTING DATA...</span>
+                        <span>SENDING VERIFICATION...</span>
                      </>
                   ) : (
                      <>
