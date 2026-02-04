@@ -185,14 +185,19 @@ export const RegistrationFormModal: React.FC<{
 
        const teamLeader = members[0];
        
-       // CLEAN EMAIL PARAMS
-       // Ensure your EmailJS template uses {{otp}} variable
+       // Create a string listing other team members if they exist
+       const otherMembers = members.length > 1 
+           ? members.slice(1).map(m => m.name).join(', ') 
+           : '';
+
        const emailParams = {
           to_name: teamLeader.name,
           to_email: teamLeader.email,
           otp: code,
-          event_name: event.title,
-          message: code // Backup variable often used in default templates
+          message: code,
+          // Optional: Add team context to OTP email if needed by template
+          team_context: otherMembers ? `Verifying for Team: ${otherMembers}` : '',
+          event_name: event.title
        };
        
        console.log("Sending OTP with params:", emailParams);
@@ -278,14 +283,19 @@ export const RegistrationFormModal: React.FC<{
            // --- SEND FINAL CONFIRMATION EMAIL ---
            try {
               const teamLeader = members[0];
+              
+              // Create formatted list of all members
+              const membersListString = members.map((m, i) => 
+                  `${i + 1}. ${m.name} - ${m.course} (Yr ${m.year})`
+              ).join('\n');
+
               const emailParams = {
                  to_name: teamLeader.name,
                  to_email: teamLeader.email,
                  event_name: event.title,
                  team_name: event.maxMembers > 1 ? teamName : "Solo Participant",
-                 members_list: members.map((m, i) => 
-                     `${i + 1}. ${m.name} (${m.course}, ${m.year} Year)`
-                 ).join('\n')
+                 members_list: membersListString,
+                 college_name: collegeName
               };
 
               await emailjs.send(
