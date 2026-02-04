@@ -47,6 +47,17 @@
         a, button, input, select, textarea, [role="button"] {
           cursor: none !important;
         }
+
+        /* Exception for areas requiring normal cursor (like forms) */
+        .normal-cursor-zone, .normal-cursor-zone * {
+          cursor: auto !important;
+        }
+        .normal-cursor-zone a, .normal-cursor-zone button, .normal-cursor-zone [role="button"], .normal-cursor-zone label {
+           cursor: pointer !important;
+        }
+        .normal-cursor-zone input, .normal-cursor-zone textarea, .normal-cursor-zone select {
+           cursor: text !important;
+        }
       }
 
       /* Hide scrollbar for Chrome, Safari and Opera */

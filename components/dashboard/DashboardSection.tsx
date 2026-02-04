@@ -200,10 +200,12 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
        )}
 
        {showForm && activeEvent && (
-         <RegistrationFormModal
-            event={activeEvent}
-            onClose={() => setShowForm(false)}
-         />
+         <div className="normal-cursor-zone">
+             <RegistrationFormModal
+                event={activeEvent}
+                onClose={() => setShowForm(false)}
+             />
+         </div>
        )}
 
        {/* View 1: Event Details (Specific Event) */}

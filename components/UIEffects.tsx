@@ -13,6 +13,7 @@ export const GrainOverlay: React.FC = () => (
 export const CustomCursor: React.FC = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
   const followerRef = useRef<HTMLDivElement>(null);
+  const isHiddenRef = useRef(false);
 
   useEffect(() => {
     // Disable on touch devices
@@ -39,14 +40,35 @@ export const CustomCursor: React.FC = () => {
     const onMouseMove = (e: MouseEvent) => {
        mouse.x = e.clientX;
        mouse.y = e.clientY;
+
+       const target = e.target as HTMLElement;
+       const isNormalCursorZone = target.closest('.normal-cursor-zone');
+
+       if (isNormalCursorZone) {
+           if (!isHiddenRef.current) {
+               // Hide custom cursor elements
+               gsap.to([cursor, follower], { opacity: 0, scale: 0, duration: 0.2, overwrite: true });
+               isHiddenRef.current = true;
+           }
+           return;
+       }
+
+       // Show custom cursor (restore if hidden)
+       if (isHiddenRef.current) {
+           gsap.to([cursor, follower], { opacity: 1, scale: 1, duration: 0.2, overwrite: true });
+           isHiddenRef.current = false;
+       }
        
        // Instant move for dot
        xSet(mouse.x);
        ySet(mouse.y);
 
-       // Reveal on first move
-       gsap.to(cursor, { scale: 1, duration: 0.3, overwrite: 'auto' });
-       gsap.to(follower, { scale: 1, duration: 0.3, overwrite: 'auto' });
+       // Reveal on first move if not already revealed/hidden
+       if (!cursor.dataset.revealed) {
+           gsap.to(cursor, { scale: 1, duration: 0.3, overwrite: 'auto' });
+           gsap.to(follower, { scale: 1, duration: 0.3, overwrite: 'auto' });
+           cursor.dataset.revealed = "true";
+       }
     };
 
     const loop = () => {
@@ -61,57 +83,9 @@ export const CustomCursor: React.FC = () => {
     window.addEventListener("mousemove", onMouseMove);
     gsap.ticker.add(loop);
 
-    // Interaction Effects
-    const handleMouseEnter = (e: Event) => {
-        // Scale dot down, scale follower up and change blend mode
-        gsap.to(cursor, { scale: 0.5, opacity: 0, duration: 0.3 });
-        gsap.to(follower, { 
-            scale: 2.5, 
-            backgroundColor: "rgba(0, 240, 255, 0.15)", 
-            borderColor: "rgba(0, 240, 255, 0)",
-            backdropFilter: "blur(2px)",
-            duration: 0.3 
-        });
-    };
-
-    const handleMouseLeave = () => {
-        gsap.to(cursor, { scale: 1, opacity: 1, duration: 0.3 });
-        gsap.to(follower, { 
-            scale: 1, 
-            backgroundColor: "transparent", 
-            borderColor: "rgba(0, 240, 255, 0.5)",
-            backdropFilter: "blur(0px)",
-            duration: 0.3 
-        });
-    };
-
-    const addListeners = () => {
-        const targets = document.querySelectorAll('button, a, input, [role="button"], .interactive, .cursor-hover');
-        targets.forEach(el => {
-            // Remove previous to avoid dupes if re-running
-            el.removeEventListener('mouseenter', handleMouseEnter);
-            el.removeEventListener('mouseleave', handleMouseLeave);
-            
-            el.addEventListener('mouseenter', handleMouseEnter);
-            el.addEventListener('mouseleave', handleMouseLeave);
-        });
-    };
-
-    addListeners();
-
-    // Watch for DOM changes to attach listeners to new elements (like modals)
-    const observer = new MutationObserver(addListeners);
-    observer.observe(document.body, { childList: true, subtree: true });
-
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
       gsap.ticker.remove(loop);
-      observer.disconnect();
-      const targets = document.querySelectorAll('button, a, input, [role="button"], .interactive, .cursor-hover');
-      targets.forEach(el => {
-         el.removeEventListener('mouseenter', handleMouseEnter);
-         el.removeEventListener('mouseleave', handleMouseLeave);
-      });
     };
   }, []);
 

@@ -109,7 +109,7 @@ export const EVENTS_LIST = [
     banner: IMAGES.BANNERS.POSTER,
     fullDesc: "Create visual assets to inspire the populace. The message is as powerful as the weapon.",
     minMembers: 1,
-    maxMembers: 1,
+    maxMembers: 2,
     timing: "10:30 AM - 11:30 AM",
     rulebook: "/assets/rulebooks/poster_making.pdf",
     contact: { phone: "+919655650184", whatsapp: "919655650184" },
