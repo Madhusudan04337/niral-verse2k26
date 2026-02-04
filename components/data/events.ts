@@ -36,9 +36,9 @@ export const EVENTS_LIST = [
     color: "text-pink-400", 
     border: "group-hover:border-pink-500", 
     shadow: "group-hover:shadow-pink-500/50", 
-    desc: "Architect the next-gen neural interfaces.",
+    desc: "Design intuitive and visually striking user interfaces.",
     banner: IMAGES.BANNERS.UI_UX,
-    fullDesc: "Redesign the interface for the colony's life support systems. Aesthetics meet functionality in this high-stakes design challenge.",
+    fullDesc: "Design intuitive and visually striking user interfaces. Smart. Secure. Seamless.",
     minMembers: 1,
     maxMembers: 2,
     timing: "10:00 AM - 12:00 PM",
@@ -48,7 +48,7 @@ export const EVENTS_LIST = [
       name: "Mr. Sarath", 
       role: "Event Head", 
       avatar: IMAGES.NPCS.SARATH, 
-      dialogue: "Form follows function, but beauty inspires hope. Show me a design that can save the world." 
+      dialogue: "Systems don’t impress me — experiences do. Build an interface users trust without thinking twice. 🎨🚀" 
     }
   },
   { 
