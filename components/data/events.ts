@@ -19,7 +19,7 @@ export const EVENTS_LIST = [
     minMembers: 1,
     maxMembers: 2,
     timing: "10:30 AM - 11:30 AM",
-    rulebook: "/assets/rulebooks/bug_hunt.pdf",
+    rulebook: "/assets/rules/bughunt.png",
     contact: { phone: "+919943086228", whatsapp: "+919943086228" },
     npc: { 
       name: "Mr. Jaaveed", 
@@ -134,8 +134,8 @@ export const EVENTS_LIST = [
     minMembers: 2,
     maxMembers: 2,
     timing: "11:30 AM - 12:30 PM",
-    rulebook: "/assets/rulebooks/meme_creation.pdf",
-    contact: { phone: "", whatsapp: "" },
+    rulebook: "/assets/rules/meme_creation.pdf",
+    contact: { phone: "+918825404569", whatsapp: "918825404569" },
     npc: { 
       name: "Mr. Sugin", 
       role: "Event Head", 
@@ -157,7 +157,7 @@ export const EVENTS_LIST = [
     minMembers: 4,
     maxMembers: 4,
     timing: "10:00 AM Onwards",
-    rulebook: "/assets/rulebooks/gaming_zone.pdf",
+    rulebook: "/assets/rules/gamingzone.jpeg",
     contact: { phone: "+916383142810", whatsapp: "916383142810" },
     npc: { 
       name: "Mr. Viknesh", 
