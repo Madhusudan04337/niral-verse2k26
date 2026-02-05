@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { 
-  ShieldCheck, MapPin, Terminal, Calendar, Wifi, Clock, 
-  GraduationCap, Building, Info, Map
+  ShieldCheck, MapPin, Calendar, Clock, 
+  GraduationCap, Building, Link2, Zap
 } from 'lucide-react';
+import { IMAGES } from './assets/images';
 
 interface CommandDeckHeroProps {
   onInitiateDrop: () => void;
@@ -231,6 +232,8 @@ export const CommandDeckHero: React.FC<CommandDeckHeroProps> = ({ onInitiateDrop
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const btnRef = useRef<HTMLDivElement>(null);
+  const logoHcasRef = useRef<HTMLDivElement>(null);
+  const logoSunstoneRef = useRef<HTMLDivElement>(null);
 
   // Countdown State
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -268,6 +271,7 @@ export const CommandDeckHero: React.FC<CommandDeckHeroProps> = ({ onInitiateDrop
     const ctx = gsap.context(() => {
        const tl = gsap.timeline();
        
+       // Entrance Animation
        tl.from(titleRef.current, {
           scale: 2,
           opacity: 0,
@@ -281,6 +285,25 @@ export const CommandDeckHero: React.FC<CommandDeckHeroProps> = ({ onInitiateDrop
           duration: 1,
           ease: "elastic.out(1, 0.5)"
        }, "-=0.8");
+
+       // Floating Partner Logos
+       // Asynchronous floating to create a dynamic feel
+       gsap.to(logoHcasRef.current, {
+         y: -8,
+         duration: 2.5,
+         ease: "sine.inOut",
+         yoyo: true,
+         repeat: -1
+       });
+
+       gsap.to(logoSunstoneRef.current, {
+         y: -8,
+         duration: 3,
+         ease: "sine.inOut",
+         yoyo: true,
+         repeat: -1,
+         delay: 0.5
+       });
 
     }, containerRef);
     return () => ctx.revert();
@@ -342,10 +365,6 @@ export const CommandDeckHero: React.FC<CommandDeckHeroProps> = ({ onInitiateDrop
                                 <ShieldCheck size={16} className="mt-0.5 text-green-400" />
                                 <span>NAAC 'A' Grade (2f) Status by UGC</span>
                             </div>
-                            <div className="text-xs font-mono text-cyan-100/80 flex items-start gap-3">
-                                <Clock size={16} className="mt-0.5 text-cyan-400" />
-                                <span>Christian Minority Institution</span>
-                            </div>
                         </div>
                         
                         <div className="mt-2 pt-3 border-t border-white/5 flex items-center gap-2 text-xs font-mono text-gray-400">
@@ -390,26 +409,88 @@ export const CommandDeckHero: React.FC<CommandDeckHeroProps> = ({ onInitiateDrop
                 </p>
             </div>
 
-            <div className="relative group perspective-500 mt-8" ref={btnRef}>
-                <button 
-                    onClick={onInitiateDrop}
-                    className="relative w-96 h-20 transform transition-all duration-300 group-hover:scale-105 group-hover:translate-y-[-2px]"
-                >
-                    {/* Button Frame - Orange */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-600/40 via-blue-500/40 to-cyan-600/40 backdrop-blur-md border-t border-b border-orange-500/50 skew-x-[-12deg] shadow-[0_0_30px_rgba(255,170,64,0.3)] group-hover:shadow-[0_0_50px_rgba(255,170,64,0.6)] overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent opacity-50" />
-                        <div className="absolute bottom-0 inset-x-0 h-1/2 bg-gradient-to-t from-cyan-500/20 to-transparent" />
-                    </div>
-                    
-                    {/* Side Decor - Orange */}
-                    <div className="absolute left-[-15px] top-0 h-full w-6 bg-gray-900/80 skew-x-[-12deg] border-l border-orange-500/50" />
-                    <div className="absolute right-[-15px] top-0 h-full w-6 bg-gray-900/80 skew-x-[-12deg] border-r border-orange-500/50" />
+            <div className="flex flex-col items-center gap-10 mt-4" ref={btnRef}>
+                
+                {/* --- ANIMATED PARTNER LOGOS --- */}
+                <div className="relative flex items-center gap-6 sm:gap-12">
+                     {/* Data Link Connector */}
+                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-[2px] bg-gradient-to-r from-cyan-500/50 via-white/80 to-orange-500/50 z-0">
+                         {/* Moving Energy Pulse */}
+                         <div className="absolute top-1/2 left-0 h-1 w-8 bg-white blur-[2px] -translate-y-1/2 animate-[pulseMove_2s_linear_infinite]" />
+                     </div>
 
-                    <div className="absolute inset-0 flex items-center justify-center gap-3 text-white font-orbitron font-bold tracking-[0.2em] text-lg z-10 drop-shadow-md">
-                        INITIATE REGISTRATION 
-                        <span className="text-white group-hover:translate-y-1 transition-transform">↓</span>
-                    </div>
-                </button>
+                     {/* Center Junction Node */}
+                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                         <div className="relative w-8 h-8 flex items-center justify-center">
+                              <div className="absolute inset-0 bg-black rounded-full border border-white/20" />
+                              <Zap size={14} className="text-yellow-400 relative z-10 animate-pulse" />
+                              <div className="absolute inset-0 border border-t-transparent border-b-transparent border-cyan-400 rounded-full animate-spin" />
+                         </div>
+                     </div>
+
+                     <style>{`
+                       @keyframes pulseMove {
+                         0% { left: 0%; opacity: 0; }
+                         50% { opacity: 1; }
+                         100% { left: 100%; opacity: 0; }
+                       }
+                       @keyframes scan-light {
+                         0% { top: -100%; opacity: 0; }
+                         50% { opacity: 1; }
+                         100% { top: 200%; opacity: 0; }
+                       }
+                     `}</style>
+
+                     {/* HCAS POD (Left) */}
+                     <div ref={logoHcasRef} className="relative z-10 group cursor-pointer">
+                         <div className="relative p-0.5 rounded-xl bg-gradient-to-b from-cyan-500/50 to-cyan-900/10 shadow-[0_0_20px_rgba(0,240,255,0.2)] group-hover:shadow-[0_0_35px_rgba(0,240,255,0.5)] transition-shadow duration-500">
+                             <div className="bg-black/80 backdrop-blur-md rounded-[10px] p-3 border border-white/5 relative overflow-hidden w-32 h-20 sm:w-40 sm:h-24 flex items-center justify-center">
+                                  {/* Scanner Light Effect */}
+                                  <div className="absolute inset-x-0 h-1/2 bg-gradient-to-b from-cyan-400/20 to-transparent blur-md -rotate-12 pointer-events-none animate-[scan-light_3s_ease-in-out_infinite]" />
+                                  
+                                  <div className="bg-white p-1 rounded-md relative z-10 shadow-lg">
+                                      <img src={IMAGES.LOGOS.HCAS} alt="HCAS" className="h-10 sm:h-14 w-auto object-contain" />
+                                  </div>
+                             </div>
+                         </div>
+                     </div>
+
+                     {/* SUNSTONE POD (Right) */}
+                     <div ref={logoSunstoneRef} className="relative z-10 group cursor-pointer">
+                         <div className="relative p-0.5 rounded-xl bg-gradient-to-b from-orange-500/50 to-orange-900/10 shadow-[0_0_20px_rgba(255,170,64,0.2)] group-hover:shadow-[0_0_35px_rgba(255,170,64,0.5)] transition-shadow duration-500">
+                             <div className="bg-black/80 backdrop-blur-md rounded-[10px] p-3 border border-white/5 relative overflow-hidden w-32 h-20 sm:w-40 sm:h-24 flex items-center justify-center">
+                                  {/* Scanner Light Effect */}
+                                  <div className="absolute inset-x-0 h-1/2 bg-gradient-to-b from-orange-400/20 to-transparent blur-md -rotate-12 pointer-events-none animate-[scan-light_3s_ease-in-out_infinite_1.5s]" />
+                                  
+                                  <div className="bg-white p-1 rounded-md relative z-10 shadow-lg">
+                                      <img src={IMAGES.LOGOS.SUNSTONE} alt="Sunstone" className="h-8 sm:h-10 w-auto object-contain" />
+                                  </div>
+                             </div>
+                         </div>
+                     </div>
+                </div>
+
+                <div className="relative group perspective-500">
+                    <button 
+                        onClick={onInitiateDrop}
+                        className="relative w-80 md:w-96 h-20 transform transition-all duration-300 group-hover:scale-105 group-hover:translate-y-[-2px]"
+                    >
+                        {/* Button Frame - Orange */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-cyan-600/40 via-blue-500/40 to-cyan-600/40 backdrop-blur-md border-t border-b border-orange-500/50 skew-x-[-12deg] shadow-[0_0_30px_rgba(255,170,64,0.3)] group-hover:shadow-[0_0_50px_rgba(255,170,64,0.6)] overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent opacity-50" />
+                            <div className="absolute bottom-0 inset-x-0 h-1/2 bg-gradient-to-t from-cyan-500/20 to-transparent" />
+                        </div>
+                        
+                        {/* Side Decor - Orange */}
+                        <div className="absolute left-[-15px] top-0 h-full w-6 bg-gray-900/80 skew-x-[-12deg] border-l border-orange-500/50" />
+                        <div className="absolute right-[-15px] top-0 h-full w-6 bg-gray-900/80 skew-x-[-12deg] border-r border-orange-500/50" />
+
+                        <div className="absolute inset-0 flex items-center justify-center gap-3 text-white font-orbitron font-bold tracking-[0.2em] text-lg z-10 drop-shadow-md">
+                            INITIATE REGISTRATION 
+                            <span className="text-white group-hover:translate-y-1 transition-transform">↓</span>
+                        </div>
+                    </button>
+                </div>
             </div>
         </div>
 

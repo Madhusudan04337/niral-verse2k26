@@ -6,8 +6,17 @@ import sugin from './images/sugin.png';
 import antony from './images/antony.jpeg';
 import madhusudan from './images/madhusudan.jpg';   
 import fowzeeya from './images/fowzeeya.jpeg';  
+import sunstone from './images/sunstone.png';
+import hcas from './images/hcas.jpg';
+import niral from './images/logo.jpg';
 
 export const IMAGES = {
+
+  LOGOS: {
+    SUNSTONE: sunstone,
+    HCAS: hcas,
+    NIRAL: niral
+  },
   // Dummy/Placeholder Profile Avatar
   DUMMY_AVATAR: "https://api.dicebear.com/9.x/avataaars/svg?seed=Felix",
 
