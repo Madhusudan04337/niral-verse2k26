@@ -661,7 +661,7 @@ export const RegistrationFormModal: React.FC<{
                   ) : (
                      <>
                         <Zap size={18} className="fill-current" />
-                        <span>PROCEED</span>
+                        <span>SUBMIT</span>
                      </>
                   )}
                </button>

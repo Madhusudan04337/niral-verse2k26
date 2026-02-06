@@ -46,7 +46,7 @@ export const NPCModal: React.FC<{
                   onClick={onAccept}
                   className="px-6 py-3 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 rounded font-bold uppercase tracking-wider transition-all hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] flex items-center space-x-2 cursor-hover"
                >
-                  <span>ACCEPT ASSIGNMENT</span>
+                  <span>ACCEPT CHALLENGE</span>
                   <Terminal size={16} />
                </button>
             </div>

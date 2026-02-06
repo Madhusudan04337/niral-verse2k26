@@ -139,7 +139,7 @@ export const EventZone: React.FC<{
                         className="w-full py-4 md:py-5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold font-orbitron uppercase tracking-widest rounded shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all flex items-center justify-center gap-3 transform hover:scale-[1.02] cursor-hover text-sm md:text-base"
                      >
                         <Zap size={20} className="fill-current" />
-                        <span>ACCEPT ASSIGNMENT</span>
+                        <span>CLICK HERE TO REGISTER</span>
                      </button>
                      <p className="text-center text-gray-500 text-[10px] md:text-xs mt-3 font-mono">
                         * SECURE CHANNEL ESTABLISHED. IMMEDIATE RESPONSE REQUIRED.
