@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Calendar, Cpu, Gamepad2, ArrowLeft
 } from 'lucide-react';
@@ -14,74 +14,50 @@ import { EventListItem } from '../events/EventListItem';
 export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBackToHome }) => {
   const [isTraveling, setIsTraveling] = useState(false);
   
-  // Persist Category Selection
+  // Initialize state from URL Params
   const [selectedCategory, setSelectedCategory] = useState<'Technical' | 'Non-Technical' | null>(() => {
-      try {
-          return sessionStorage.getItem('niral_category') as 'Technical' | 'Non-Technical' | null;
-      } catch { return null; }
+      const searchParams = new URLSearchParams(window.location.search);
+      return searchParams.get('category') as 'Technical' | 'Non-Technical' | null;
   });
 
-  // Persist Active Event
   const [activeEventId, setActiveEventId] = useState<string | null>(() => {
-      try {
-          return sessionStorage.getItem('niral_event_id');
-      } catch { return null; }
+      const searchParams = new URLSearchParams(window.location.search);
+      return searchParams.get('eventId');
   });
 
   const [showNpc, setShowNpc] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showForm, setShowForm] = useState(false);
   
-  // Ref to track if we've done initial history reconstruction
-  const historyInitialized = useRef(false);
-
   const activeEvent = EVENTS_LIST.find(e => e.id === activeEventId);
   const filteredEvents = EVENTS_LIST.filter(e => e.category === selectedCategory);
 
-  // --- HISTORY MANAGEMENT ---
+  // Update URL helper
+  const updateUrl = (cat: string | null, evtId: string | null) => {
+      const url = new URL(window.location.href);
+      url.searchParams.set('view', 'dashboard');
+      
+      if (cat) url.searchParams.set('category', cat);
+      else url.searchParams.delete('category');
+      
+      if (evtId) url.searchParams.set('eventId', evtId);
+      else url.searchParams.delete('eventId');
 
-  // 1. Reconstruct History on Mount (for Reloads)
+      window.history.pushState({}, '', url.toString());
+  };
+
+  // Sync state on PopState (Browser Back Button)
   useEffect(() => {
-    if (historyInitialized.current) return;
-    historyInitialized.current = true;
-
-    // If we loaded deep into the app (e.g. Event View) but history state doesn't match
-    const currentState = window.history.state;
-    
-    // If we are at an Event, but history is missing or just 'dashboard'
-    if (activeEventId && (!currentState || !currentState.eventId)) {
-       // We need to inject the back stack: Dashboard -> Category -> Event
-       // Note: This is a bit hacky but prevents "Back" from exiting the app on reload
-       const cat = selectedCategory;
-       const evt = activeEventId;
-       
-       // Replace current with Root
-       window.history.replaceState({ view: 'dashboard' }, '');
-       // Push Category
-       if (cat) window.history.pushState({ view: 'dashboard', category: cat }, '');
-       // Push Event
-       if (evt) window.history.pushState({ view: 'dashboard', category: cat, eventId: evt }, '');
-    } 
-    else if (selectedCategory && (!currentState || !currentState.category)) {
-       const cat = selectedCategory;
-       window.history.replaceState({ view: 'dashboard' }, '');
-       window.history.pushState({ view: 'dashboard', category: cat }, '');
-    }
-  }, []); // Run once on mount
-
-  // 2. Handle Browser Back Button (PopState)
-  useEffect(() => {
-     const handlePopState = (event: PopStateEvent) => {
-        const state = event.state;
+     const handlePopState = () => {
+        const searchParams = new URLSearchParams(window.location.search);
+        const cat = searchParams.get('category') as 'Technical' | 'Non-Technical' | null;
+        const evtId = searchParams.get('eventId');
         
-        // We only care if the state is related to 'dashboard'
-        // MainContent handles switching out of dashboard entirely
-        if (state && state.view === 'dashboard') {
-            // Sync local state with history state
-            setActiveEventId(state.eventId || null);
-            setSelectedCategory(state.category || null);
-            
-            // Close any open modals/overlays
+        setSelectedCategory(cat);
+        setActiveEventId(evtId);
+        
+        // Reset modals on navigation
+        if (!evtId) {
             setIsTraveling(false);
             setShowNpc(false);
             setShowConfirm(false);
@@ -93,7 +69,7 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
      return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // 3. Update Session Storage
+  // Update Session Storage (Secondary Backup)
   useEffect(() => {
     try {
         if (selectedCategory) sessionStorage.setItem('niral_category', selectedCategory);
@@ -109,15 +85,13 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
 
   const handleCategorySelect = (cat: 'Technical' | 'Non-Technical') => {
       setSelectedCategory(cat);
-      // Push History
-      window.history.pushState({ view: 'dashboard', category: cat }, '');
+      updateUrl(cat, null);
   };
 
   const handleEventClick = (eventId: string) => {
     setActiveEventId(eventId);
     setIsTraveling(true);
-    // Push History
-    window.history.pushState({ view: 'dashboard', category: selectedCategory, eventId: eventId }, '');
+    updateUrl(selectedCategory, eventId);
     
     // Reset all modal states
     setShowNpc(false); 
@@ -138,14 +112,22 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
      setShowConfirm(true);
   };
 
-  const handleConfirmYes = () => {
+  const handleConfirmYesLogic = () => {
      setShowConfirm(false);
      setShowForm(true);
   };
 
-  const handleConfirmYesLogic = () => {
-     setShowConfirm(false);
-     setShowForm(true);
+  const handleBackNavigation = () => {
+     if (showEventView) {
+         // Go back to Event List
+         window.history.back(); // PopState listener will handle state update
+     } else if (showListView) {
+         // Go back to Category Selection
+         window.history.back(); // PopState listener will handle state update
+     } else {
+         // Go back to Command Deck
+         onBackToHome();
+     }
   };
 
   const showEventView = activeEventId !== null && !isTraveling;

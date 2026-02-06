@@ -3,6 +3,10 @@ import {
   Smile, Gamepad2, Briefcase 
 } from 'lucide-react';
 import { IMAGES } from '../assets/images';
+import bughunt from '../assets/rules/bughunt.png';
+import gamingzone from '../assets/rules/gamingzone.jpeg';
+import ui_ux from '../assets/rules/ui_ux.pdf';
+import poster from '../assets/rules/poster.png';
 
 export const EVENTS_LIST = [
   { 
@@ -13,19 +17,19 @@ export const EVENTS_LIST = [
     color: "text-red-400", 
     border: "group-hover:border-red-500", 
     shadow: "group-hover:shadow-red-500/50", 
-    desc: "Identify and fix critical bugs in given programs under time pressure.",
+    desc: "Identify and neutralize system vulnerabilities.",
     banner: IMAGES.BANNERS.BUG_HUNT,
-    fullDesc: "Step into a fast-paced debugging arena where participants must analyze, detect, and resolve errors in provided code within time limit. Accuracy, logical thinking, and speed will determine your rank on the leaderboard. The more bugs you eliminate, the higher you score.",
+    fullDesc: "Dive into the mainframe and purge critical system errors. Competitors must identify security flaws in a simulated banking infrastructure within 60 minutes.",
     minMembers: 1,
     maxMembers: 2,
     timing: "10:30 AM - 11:30 AM",
-    rulebook: "/assets/rules/bughunt.png",
+    rulebook: bughunt,
     contact: { phone: "+919943086228", whatsapp: "+919943086228" },
     npc: { 
       name: "Mr. Jaaveed", 
       role: "Event Head", 
       avatar: IMAGES.NPCS.JAAVEED, 
-      dialogue: "The system is unstable, Agent. Find the flaws, patch the code, and restore control before time runs out." 
+      dialogue: "The code is bleeding, Agent. I need you to patch those vulnerabilities before the system crashes." 
     }
   },
   { 
@@ -36,19 +40,19 @@ export const EVENTS_LIST = [
     color: "text-pink-400", 
     border: "group-hover:border-pink-500", 
     shadow: "group-hover:shadow-pink-500/50", 
-    desc: "Design intuitive and visually striking user interfaces.  Smart. Secure. Seamless.",
+    desc: "Architect the next-gen neural interfaces.",
     banner: IMAGES.BANNERS.UI_UX,
-    fullDesc: "Enter Design Mode and craft a user-centered interface that balances aesthetics and functionality. Focus on usability, clarity, and innovation while solving real-world design challenges. Creativity, structure, and user experience will define the winners.",
+    fullDesc: "Redesign the interface for the colony's life support systems. Aesthetics meet functionality in this high-stakes design challenge.",
     minMembers: 1,
     maxMembers: 2,
     timing: "10:00 AM - 12:00 PM",
-    rulebook: "/assets/rulebooks/ui_ux.pdf",
+    rulebook: ui_ux,
     contact: { phone: "+917010974603", whatsapp: "+917010974603" },
     npc: { 
       name: "Mr. Sarath", 
       role: "Event Head", 
       avatar: IMAGES.NPCS.SARATH, 
-      dialogue: "Systems don’t impress me — experiences do. Build an interface users trust without thinking twice. 🎨🚀" 
+      dialogue: "Form follows function, but beauty inspires hope. Show me a design that can save the world." 
     }
   },
   { 
@@ -59,19 +63,19 @@ export const EVENTS_LIST = [
     color: "text-yellow-400", 
     border: "group-hover:border-yellow-500", 
     shadow: "group-hover:shadow-yellow-500/50", 
-    desc: "Test your knowledge of legacy and quantum systems.",
+    desc: "Test your knowledge, logic, and speed in a fun quiz battle.",
     banner: IMAGES.BANNERS.TECH_QUIZ,
-    fullDesc: "A gauntlet of trivia spanning from the first transistor to the latest quantum processors. Only the most knowledgeable survive.",
+    fullDesc: "A competitive quiz event featuring multiple engaging rounds designed to challenge your knowledge, reasoning, and quick thinking. Participants must think smart, respond fast, and stay sharp to score higher and lead the scoreboard.",
     minMembers: 2,
     maxMembers: 2,
     timing: "11:30 AM - 12:30 PM",
-    rulebook: "/assets/rulebooks/tech_quiz.pdf",
+    rulebook: "/assets/rules/tech_quiz.pdf",
     contact: { phone: "", whatsapp: "" },
     npc: { 
       name: "Ms. Fowzeeya", 
       role: "Event Head", 
       avatar: IMAGES.NPCS.FOWZEEYA, 
-      dialogue: "Query initiated. Validating intelligence quotient. Prepare for data extraction." 
+      dialogue: "Questions incoming. Stay sharp, think fast, and prove your mind is faster than the clock. 🎯🔥"
     }
   },
   { 
@@ -82,19 +86,19 @@ export const EVENTS_LIST = [
     color: "text-blue-400", 
     border: "group-hover:border-blue-500", 
     shadow: "group-hover:shadow-blue-500/50", 
-    desc: "Solve cyber-security and networking clues in a fast-paced technical crossword.",
+    desc: "Optimize data flow across the global grid.",
     banner: IMAGES.BANNERS.NETIQ,
-    fullDesc: "Put your networking knowledge and cyber-security awareness to the test in this fun yet challenging crossword battle. Decode clues related to protocols, attacks, tools, and security concepts within the time limit. Speed, accuracy, and technical depth will determine the winners.",
+    fullDesc: "The network is congested. You must re-route packets and optimize protocols to restore global communications.",
     minMembers: 2,
     maxMembers: 2,
     timing: "01:30 PM - 02:30 PM",
-    rulebook: "/assets/rulebooks/netiq.pdf",
+    rulebook: "/assets/rules/netiq.pdf",
     contact: { phone: "+919360331266", whatsapp: "919360331266" },
     npc: { 
       name: "Mr. Madhusudan", 
       role: "Event Head", 
       avatar: IMAGES.NPCS.MADHUSUDAN, 
-      dialogue: "The grid is encrypted. Decode the clues, reconnect the network, and restore the signal before time expires."
+      dialogue: "Signal strength is at 15%. I need you to boost the grid nodes manually. Hurry." 
     }
   },
   { 
@@ -105,19 +109,19 @@ export const EVENTS_LIST = [
     color: "text-blue-400", 
     border: "group-hover:border-blue-500", 
     shadow: "group-hover:shadow-blue-500/50", 
-    desc: "Create impactful posters that communicate powerful ideas visually.",
+    desc: "Design propaganda for the resistance.",
     banner: IMAGES.BANNERS.POSTER,
-    fullDesc: "Showcase your creativity and presentation skills by designing an engaging and meaningful poster. Participants must effectively convey their ideas through visuals, layout, and message clarity within the given time. Strong concepts and impactful designs score higher.",
+    fullDesc: "Create visual assets to inspire the populace. The message is as powerful as the weapon.",
     minMembers: 1,
     maxMembers: 2,
     timing: "10:30 AM - 11:30 AM",
-    rulebook: "/assets/rulebooks/poster_making.pdf",
+    rulebook: poster,
     contact: { phone: "+919655650184", whatsapp: "919655650184" },
     npc: { 
       name: "Mr. Gokulnath", 
       role: "Event Head", 
       avatar: IMAGES.NPCS.GOKULNATH, 
-      dialogue: "Your message is your power. Design with purpose, speak through visuals, and make it impossible to ignore" 
+      dialogue: "The streets are silent. Wake them up with your art. Make it loud, make it bold." 
     }
   },
   { 
@@ -128,19 +132,19 @@ export const EVENTS_LIST = [
     color: "text-green-400", 
     border: "group-hover:border-green-500", 
     shadow: "group-hover:shadow-green-500/50", 
-    desc: "Create a unique and hilarious meme from the given theme.",
+    desc: "Engage in viral memetic warfare.",
     banner: IMAGES.BANNERS.MEME,
-    fullDesc: "Put your creativity and humor to the test by designing an original meme based on the provided input. Clarity, wit, and relevance matter most. Offensive, inappropriate, or duplicated content will be rejected immediately. Make it funny, make it smart, and stand out.",
+    fullDesc: "Construct viral payloads to disrupt enemy morale. Humor is the ultimate trojan horse.",
     minMembers: 2,
     maxMembers: 2,
     timing: "11:30 AM - 12:30 PM",
     rulebook: "/assets/rules/meme_creation.pdf",
-    contact: { phone: "+918825404569", whatsapp: "918825404569" },
+    contact: { phone: "", whatsapp: "" },
     npc: { 
       name: "Mr. Sugin", 
       role: "Event Head", 
       avatar: IMAGES.NPCS.SUGIN, 
-      dialogue: "Make it clever. Make it viral. Only the sharpest humor survives. 😎🔥"
+      dialogue: "Top kek. Upload the payload. If they aren't laughing, we aren't winning." 
     }
   },
   { 
@@ -151,19 +155,19 @@ export const EVENTS_LIST = [
     color: "text-cyan-400", 
     border: "group-hover:border-cyan-500", 
     shadow: "group-hover:shadow-cyan-500/50", 
-    desc: "4v4 Free Fire squad battles testing teamwork and reflexes.",
+    desc: "Combat simulation and tactical training.",
     banner: IMAGES.BANNERS.GAMING,
-    fullDesc: "Step into the Gaming Zone for intense 4v4 Free Fire squad matches. Compete in fast-paced battles that challenge your coordination, strategy, and combat skills. Work as a team, dominate the arena, and prove your squad is unstoppable.",
+    fullDesc: "Enter the arena. FPS, MOBA, and Battle Royale simulations to test your reflexes and strategic thinking.",
     minMembers: 4,
     maxMembers: 4,
     timing: "10:00 AM Onwards",
-    rulebook: "/assets/rules/gamingzone.jpeg",
+    rulebook: gamingzone,
     contact: { phone: "+916383142810", whatsapp: "916383142810" },
     npc: { 
       name: "Mr. Viknesh", 
       role: "Event Head", 
       avatar: IMAGES.NPCS.VIKNESH, 
-      dialogue: "Squad up. Strategy ready. Victory belongs to the team that fights together." 
+      dialogue: "1v1 me, recruit. Let's see if your aim is as good as your talk." 
     }
   },
   { 
@@ -180,7 +184,7 @@ export const EVENTS_LIST = [
     minMembers: 6,
     maxMembers: 6,
     timing: "02:00 PM - 03:00 PM",
-    rulebook: "/assets/rulebooks/corporate_walk.pdf",
+    rulebook: "/assets/rules/corporate_walk.pdf",
     contact: { phone: "", whatsapp: "" },
     npc: { 
       name: "Mr. Antony", 

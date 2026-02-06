@@ -4,12 +4,20 @@ import { ArrivalCutscene } from './transitions/ArrivalCutscene';
 import { DashboardSection } from './dashboard/DashboardSection';
 
 export const MainContent: React.FC = () => {
-  // Initialize state from storage to keep view continuity
+  // Initialize state from URL params OR Pathname first, then storage
   const [viewState, setViewState] = useState<'command' | 'cutscene' | 'dashboard'>(() => {
     try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const viewParam = searchParams.get('view');
+      const path = window.location.pathname;
+
+      // Handle direct path access or query param
+      if (viewParam === 'dashboard' || path.includes('/dashboard')) return 'dashboard';
+      if (viewParam === 'cutscene') return 'cutscene';
+      if (viewParam === 'command') return 'command';
+
       const saved = sessionStorage.getItem('niral_main_view');
-      // If user was in cutscene during reload, skip straight to dashboard
-      if (saved === 'cutscene') return 'dashboard';
+      if (saved === 'cutscene') return 'dashboard'; // Don't re-run cutscene on reload
       return (saved as 'command' | 'dashboard') || 'command';
     } catch (e) {
       return 'command';
@@ -18,34 +26,54 @@ export const MainContent: React.FC = () => {
 
   const dashboardRef = useRef<HTMLDivElement>(null);
 
-  // Sync state to Session Storage
+  // Sync state to URL and Session Storage
   useEffect(() => {
     try {
       sessionStorage.setItem('niral_main_view', viewState);
+      
+      // Update URL without reloading
+      const url = new URL(window.location.href);
+      
+      if (viewState === 'command') {
+         // Clear params when on command deck
+         url.searchParams.delete('view');
+         url.searchParams.delete('category');
+         url.searchParams.delete('eventId');
+         
+         // If we are on /dashboard path, reset to root
+         if (window.location.pathname.includes('/dashboard')) {
+             window.history.pushState({ view: 'command' }, '', '/');
+             return;
+         }
+      } else {
+         url.searchParams.set('view', viewState);
+      }
+      
+      // Update history state
+      // We check if the state actually needs updating to avoid redundant history entries
+      const currentViewParam = new URLSearchParams(window.location.search).get('view');
+      if (currentViewParam !== viewState) {
+          window.history.pushState({ view: viewState }, '', url.toString());
+      }
+
     } catch (e) {
-      console.warn('Session storage unavailable');
+      console.warn('Navigation update failed');
     }
   }, [viewState]);
 
-  // Handle Browser History (Back Button / Gestures)
+  // Handle Browser Back/Forward Buttons
   useEffect(() => {
-    // 1. Set initial history state if null
-    if (!window.history.state) {
-      window.history.replaceState({ view: viewState }, '');
-    }
-
-    // 2. Listen for PopState (Back/Forward)
-    const handlePopState = (event: PopStateEvent) => {
-      const state = event.state;
-      if (state && state.view) {
-        // Only handle root level view changes (command vs dashboard)
-        // Dashboard internal nav is handled by DashboardSection
-        if (state.view === 'command' || state.view === 'dashboard') {
-             setViewState(state.view);
-        }
+    const handlePopState = () => {
+      const searchParams = new URLSearchParams(window.location.search);
+      const view = searchParams.get('view') as any;
+      const path = window.location.pathname;
+      
+      if (view) {
+          setViewState(view);
+      } else if (path.includes('/dashboard')) {
+          setViewState('dashboard');
       } else {
-        // Fallback: If no state (e.g. going back to start), default to command
-        setViewState('command');
+          setViewState('command');
       }
     };
 
@@ -54,11 +82,7 @@ export const MainContent: React.FC = () => {
   }, []);
 
   const handleCutsceneComplete = () => {
-    // Push new history state when entering dashboard
-    window.history.pushState({ view: 'dashboard' }, '');
     setViewState('dashboard');
-    
-    // Allow DOM update then scroll
     setTimeout(() => {
       dashboardRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
@@ -75,11 +99,7 @@ export const MainContent: React.FC = () => {
       {viewState === 'dashboard' && (
         <div ref={dashboardRef}>
            <DashboardSection onBackToHome={() => {
-              // Force navigation to command view
               setViewState('command');
-              // Using pushState ensures we have a valid history entry to return to dashboard via forward
-              // and standardizes the navigation flow
-              window.history.pushState({ view: 'command' }, '');
            }} />
         </div>
       )}
