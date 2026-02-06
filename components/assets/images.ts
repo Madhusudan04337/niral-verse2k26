@@ -4,7 +4,7 @@ import sarath from './images/sarath.jpeg';
 import jaaveed from './images/jaaveed.jpeg';
 import sugin from './images/sugin.png';
 import antony from './images/antony.jpeg';
-import madhusudan from './images/madhusudan.jpg';   
+import usman from './images/usman_ali.jpeg';   
 import fowzeeya from './images/fowzeeya.jpeg';  
 import sunstone from './images/sunstone.png';
 import hcas from './images/hcas.jpg';
@@ -37,7 +37,7 @@ export const IMAGES = {
     JAAVEED: jaaveed,
     SARATH: sarath,
     FOWZEEYA: fowzeeya,
-    MADHUSUDAN: madhusudan,
+    USMAN_ALI: usman,
     GOKULNATH: gokulnath,
     SUGIN: sugin,
     VIKNESH: viknesh,

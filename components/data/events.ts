@@ -8,6 +8,7 @@ import gamingzone from '../assets/rules/gamingzone.jpeg';
 import ui_ux from '../assets/rules/ui_ux.pdf';
 import poster from '../assets/rules/poster.png';
 import memes from '../assets/rules/memes.jpeg';
+import quiz from '../assets/rules/tech-quiz.png';
 
 export const EVENTS_LIST = [
   { 
@@ -70,7 +71,7 @@ export const EVENTS_LIST = [
     minMembers: 2,
     maxMembers: 2,
     timing: "11:30 AM - 12:30 PM",
-    rulebook: "/assets/rules/tech_quiz.pdf",
+    rulebook: quiz,
     contact: { phone: "", whatsapp: "" },
     npc: { 
       name: "Ms. Fowzeeya", 
@@ -94,11 +95,11 @@ export const EVENTS_LIST = [
     maxMembers: 2,
     timing: "01:30 PM - 02:30 PM",
     rulebook: "/assets/rules/netiq.pdf",
-    contact: { phone: "+919360331266", whatsapp: "919360331266" },
+    contact: { phone: "+919345254828", whatsapp: "919345254828" },
     npc: { 
-      name: "Mr. Madhusudan", 
+      name: "Mr. Usman Ali", 
       role: "Event Head", 
-      avatar: IMAGES.NPCS.MADHUSUDAN, 
+      avatar: IMAGES.NPCS.USMAN_ALI, 
       dialogue: "Signal strength is at 15%. I need you to boost the grid nodes manually. Hurry." 
     }
   },
