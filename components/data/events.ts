@@ -7,6 +7,7 @@ import bughunt from '../assets/rules/bughunt.png';
 import gamingzone from '../assets/rules/gamingzone.jpeg';
 import ui_ux from '../assets/rules/ui_ux.pdf';
 import poster from '../assets/rules/poster.png';
+import memes from '../assets/rules/memes.jpeg';
 
 export const EVENTS_LIST = [
   { 
@@ -138,7 +139,7 @@ export const EVENTS_LIST = [
     minMembers: 2,
     maxMembers: 2,
     timing: "11:30 AM - 12:30 PM",
-    rulebook: "/assets/rules/meme_creation.pdf",
+    rulebook: memes,
     contact: { phone: "", whatsapp: "" },
     npc: { 
       name: "Mr. Sugin", 
