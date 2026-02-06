@@ -342,17 +342,17 @@ export const RegistrationFormModal: React.FC<{
                </div>
                <h3 className="text-2xl font-orbitron font-bold text-white mb-2">REGISTRATION COMPLETE</h3>
                <p className="text-gray-400 mb-6">
-                  Mission protocols accepted. Your unit has been registered in the mainframe.
+                  Registration successful. You have been added to the event list.
                   <br/>
                   <span className="text-xs text-cyan-400/70 mt-2 block">
-                     Confirmation protocol sent to {members[0].email}
+                     Confirmation email sent to {members[0].email}
                   </span>
                </p>
                <button 
                   onClick={onClose}
                   className="px-8 py-3 bg-green-500 hover:bg-green-400 text-black font-bold rounded uppercase tracking-wider cursor-hover"
                >
-                  RETURN TO BASE
+                  CLOSE
                </button>
             </div>
          </div>
@@ -374,7 +374,7 @@ export const RegistrationFormModal: React.FC<{
                 
                 <h3 className="text-2xl font-orbitron font-bold text-white mb-2 tracking-wide">SECURITY CHECK</h3>
                 <p className="text-gray-400 text-sm font-mono mb-6">
-                    A verification protocol has been sent to <br/>
+                    A verification code has been sent to <br/>
                     <span className="text-cyan-400">{members[0].email}</span>.
                 </p>
 
@@ -444,14 +444,14 @@ export const RegistrationFormModal: React.FC<{
                <div>
                   <h3 className="text-xl font-orbitron font-bold text-white flex items-center space-x-2">
                      <Target className="text-cyan-400" size={20} />
-                     <span>MISSION REGISTRATION PORTAL</span>
+                     <span>Event Registration</span>
                   </h3>
                   <div className="flex items-center space-x-2 mt-1">
                      <span className="text-xs text-cyan-500 font-mono bg-cyan-900/30 px-2 py-0.5 rounded border border-cyan-500/30">
-                        PROTOCOL: {event.title.toUpperCase()}
+                        Event: {event.title}
                      </span>
                      <span className="text-xs text-gray-500 font-mono">
-                        REQUIRED UNITS: {event.minMembers === event.maxMembers ? event.minMembers : `${event.minMembers} - ${event.maxMembers}`}
+                        Team Size: {event.minMembers === event.maxMembers ? `${event.minMembers} Member${event.minMembers > 1 ? 's' : ''}` : `${event.minMembers} - ${event.maxMembers} Members`}
                      </span>
                   </div>
                </div>
@@ -464,12 +464,12 @@ export const RegistrationFormModal: React.FC<{
                   
                   {/* Left Column: Team Details */}
                   <div className="space-y-6">
-                     <h4 className="text-sm font-orbitron text-gray-400 border-b border-gray-800 pb-2 mb-4">SECTOR A: UNIT CONFIGURATION</h4>
+                     <h4 className="text-sm font-orbitron text-gray-400 border-b border-gray-800 pb-2 mb-4">Team Details</h4>
                      
                      {/* Participation Type Selection (Only for 1-2 member events) */}
                      {event.minMembers !== event.maxMembers && (
                         <div className="p-4 bg-white/5 rounded border border-dashed border-gray-700">
-                           <label className="text-xs font-mono text-cyan-400 uppercase block mb-3">Select Deployment Type</label>
+                           <label className="text-xs font-mono text-cyan-400 uppercase block mb-3">Select Participation Type</label>
                            <div className="flex space-x-4">
                               <label className={`flex-1 cursor-pointer p-3 rounded border text-center transition-all cursor-hover ${participationMode === 'solo' ? 'bg-cyan-900/40 border-cyan-500 text-white' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>
                                  <input 
@@ -479,7 +479,7 @@ export const RegistrationFormModal: React.FC<{
                                     checked={participationMode === 'solo'} 
                                     onChange={() => setParticipationMode('solo')} 
                                  />
-                                 <span className="font-bold text-sm">SOLO OPERATIVE</span>
+                                 <span className="font-bold text-sm">Individual</span>
                               </label>
                               <label className={`flex-1 cursor-pointer p-3 rounded border text-center transition-all cursor-hover ${participationMode === 'duo' ? 'bg-cyan-900/40 border-cyan-500 text-white' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>
                                  <input 
@@ -489,7 +489,7 @@ export const RegistrationFormModal: React.FC<{
                                     checked={participationMode === 'duo'} 
                                     onChange={() => setParticipationMode('duo')} 
                                  />
-                                 <span className="font-bold text-sm">TACTICAL DUO</span>
+                                 <span className="font-bold text-sm">Team (2 Members)</span>
                               </label>
                            </div>
                         </div>
@@ -499,7 +499,7 @@ export const RegistrationFormModal: React.FC<{
                      {event.maxMembers > 1 && (
                         <div className="space-y-2 group">
                            <label className="text-xs font-mono text-cyan-400 uppercase flex justify-between">
-                              Team Designation (Name)
+                              Team Name
                               {errors.teamName && <span className="text-red-400 flex items-center gap-1 normal-case"><AlertCircle size={10} /> {errors.teamName}</span>}
                            </label>
                            <div className="relative">
@@ -521,7 +521,7 @@ export const RegistrationFormModal: React.FC<{
                      {/* College Name (Single Input) */}
                      <div className="space-y-2 group">
                         <label className="text-xs font-mono text-cyan-400 uppercase flex justify-between">
-                           Affiliated Institution (College)
+                           College / Institution Name
                            {errors.collegeName && <span className="text-red-400 flex items-center gap-1 normal-case"><AlertCircle size={10} /> {errors.collegeName}</span>}
                         </label>
                         <div className="relative">
@@ -537,20 +537,19 @@ export const RegistrationFormModal: React.FC<{
                               placeholder="Institute of Technology"
                            />
                         </div>
-                        <p className="text-[10px] text-gray-500 italic">* Applies to all unit members.</p>
+                        <p className="text-[10px] text-gray-500 italic">* Applies to all team members.</p>
                      </div>
                   </div>
 
                   {/* Right Column: Member Details */}
                   <div className="space-y-6">
-                     <h4 className="text-sm font-orbitron text-gray-400 border-b border-gray-800 pb-2 mb-4">SECTOR B: OPERATIVE MANIFEST</h4>
+                     <h4 className="text-sm font-orbitron text-gray-400 border-b border-gray-800 pb-2 mb-4">Participant Details</h4>
                      
                      <div className="space-y-8 max-h-[50vh] overflow-y-auto pr-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
                         {members.map((member, index) => (
                            <div key={index} className="bg-white/5 p-4 rounded border border-white/10 hover:border-cyan-500/30 transition-colors animate-in slide-in-from-right duration-300">
                               <h5 className="text-xs font-bold text-cyan-300 mb-3 uppercase tracking-wider flex justify-between">
-                                 <span>{index === 0 ? "UNIT LEADER" : `OPERATIVE 0${index + 1}`}</span>
-                                 <span className="text-gray-600">ID-#{index + 1}00</span>
+                                 <span>{index === 0 ? "Team Leader Details" : `Participant ${index + 1}`}</span>
                               </h5>
                               
                               <div className="space-y-3">
@@ -592,7 +591,7 @@ export const RegistrationFormModal: React.FC<{
                                           <Phone className={`absolute left-3 top-3 ${errors[`members.${index}.phone`] ? 'text-red-500' : 'text-gray-600'}`} size={14} />
                                           <input 
                                              type="tel" 
-                                             placeholder="Phone (10 digits)"
+                                             placeholder="Phone Number"
                                              value={member.phone}
                                              onChange={(e) => handleMemberChange(index, 'phone', e.target.value)}
                                              className={`w-full bg-black/50 border rounded py-2 pl-9 text-sm text-white focus:outline-none cursor-hover ${errors[`members.${index}.phone`] ? 'border-red-500 focus:border-red-500' : 'border-gray-700 focus:border-cyan-500'}`}
@@ -607,7 +606,7 @@ export const RegistrationFormModal: React.FC<{
                                           <BookOpen className={`absolute left-3 top-3 ${errors[`members.${index}.course`] ? 'text-red-500' : 'text-gray-600'}`} size={14} />
                                           <input 
                                              type="text" 
-                                             placeholder="Course"
+                                             placeholder="Department / Course"
                                              value={member.course}
                                              onChange={(e) => handleMemberChange(index, 'course', e.target.value)}
                                              className={`w-full bg-black/50 border rounded py-2 pl-9 text-sm text-white focus:outline-none cursor-hover ${errors[`members.${index}.course`] ? 'border-red-500 focus:border-red-500' : 'border-gray-700 focus:border-cyan-500'}`}
@@ -626,7 +625,7 @@ export const RegistrationFormModal: React.FC<{
                                           onChange={(e) => handleMemberChange(index, 'year', e.target.value)}
                                           className={`w-full bg-black/50 border rounded py-2 pl-9 text-sm focus:outline-none appearance-none cursor-pointer cursor-hover ${member.year ? 'text-white' : 'text-gray-400'} ${errors[`members.${index}.year`] ? 'border-red-500 focus:border-red-500' : 'border-gray-700 focus:border-cyan-500'}`}
                                        >
-                                          <option value="">Select Year</option>
+                                          <option value="">Year of Study</option>
                                           <option value="1">1st Year</option>
                                           <option value="2">2nd Year</option>
                                           <option value="3">3rd Year</option>
@@ -647,7 +646,7 @@ export const RegistrationFormModal: React.FC<{
             {/* Footer / Actions */}
             <div className="bg-white/5 backdrop-blur-md p-6 border-t border-white/10 shrink-0 flex justify-between items-center">
                <div className="text-xs text-gray-500 font-mono hidden md:block">
-                  ENCRYPTION: AES-256-GCM <span className="text-green-500 ml-2">ACTIVE</span>
+                  Your data is secure.
                </div>
                <button 
                   onClick={(e) => handleInitiateOtp(e as any)}
@@ -662,7 +661,7 @@ export const RegistrationFormModal: React.FC<{
                   ) : (
                      <>
                         <Zap size={18} className="fill-current" />
-                        <span>INITIATE DEPLOYMENT</span>
+                        <span>PROCEED</span>
                      </>
                   )}
                </button>
