@@ -110,7 +110,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
               [ MISSION_OBJECTIVE ]
             </h2>
             <p className="text-gray-300 font-mono text-[10px] sm:text-xs md:text-sm leading-relaxed text-justify md:text-center">
-              Niral-Verse 2K26 is a multi-dimensional technical simulation hosted by Hindustan College of Arts & Science. It is engineered to identify high-caliber talent in logic, code, and creative architecture. Agents will navigate through complex protocols to neutralize system vulnerabilities and showcase innovation. Prepare your interface. The mission is live.
+              Niralverse 2K26 marks the powerful return of our flagship event after the grand success of its first edition. Bringing together innovation, creativity, and talent, this second chapter features an exciting lineup of both technical and non-technical events designed to challenge minds and celebrate skills. Get ready to compete, connect, and be part of an experience where ideas ignite and possibilities expand.
             </p>
           </div>
         </div>
