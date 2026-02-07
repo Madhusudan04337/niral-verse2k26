@@ -9,6 +9,7 @@ import ui_ux from '../assets/rules/ui_ux.pdf';
 import poster from '../assets/rules/poster.png';
 import memes from '../assets/rules/memes.jpeg';
 import quiz from '../assets/rules/tech-quiz.png';
+import netiq from '../assets/rules/net-iq.png';
 
 export const EVENTS_LIST = [
   { 
@@ -88,19 +89,19 @@ export const EVENTS_LIST = [
     color: "text-blue-400", 
     border: "group-hover:border-blue-500", 
     shadow: "group-hover:shadow-blue-500/50", 
-    desc: "Optimize data flow across the global grid.",
+    desc: "A fast-paced technical challenge combining logic, knowledge, and quick thinking.",
     banner: IMAGES.BANNERS.NETIQ,
-    fullDesc: "The network is congested. You must re-route packets and optimize protocols to restore global communications.",
+    fullDesc: "NetIQ Challenge is a two-round competitive event featuring a QR-based crossword hunt followed by an MCQ battle. Teams must scan clues, solve technical terms accurately, and qualify for the final round. Speed, precision, and smart thinking will decide who tops the leaderboard.",
     minMembers: 2,
     maxMembers: 2,
     timing: "01:30 PM - 02:30 PM",
-    rulebook: "/assets/rules/netiq.pdf",
+    rulebook: netiq,
     contact: { phone: "+919345254828", whatsapp: "919345254828" },
     npc: { 
       name: "Mr. Usman Ali", 
       role: "Event Head", 
       avatar: IMAGES.NPCS.USMAN_ALI, 
-      dialogue: "Signal strength is at 15%. I need you to boost the grid nodes manually. Hurry." 
+      dialogue: "The system is live. Decode the clues, think ahead, and prove your NetIQ under pressure⚡."
     }
   },
   { 
