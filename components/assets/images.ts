@@ -3,7 +3,7 @@ import viknesh from './images/viknesh.jpeg';
 import sarath from './images/sarath.jpeg';
 import jaaveed from './images/jaaveed.jpeg';
 import sugin from './images/sugin.png';
-import antony from './images/antony.jpeg';
+import shakthi from './images/shakthi.jpeg';
 import usman from './images/usman_ali.jpeg';   
 import fowzeeya from './images/fowzeeya.jpeg';  
 import sunstone from './images/sunstone.png';
@@ -41,6 +41,6 @@ export const IMAGES = {
     GOKULNATH: gokulnath,
     SUGIN: sugin,
     VIKNESH: viknesh,
-    ANTONY: antony,
+    SHAKTHI: shakthi,
   }
 };

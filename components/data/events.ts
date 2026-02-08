@@ -10,6 +10,7 @@ import poster from '../assets/rules/poster.png';
 import memes from '../assets/rules/memes.jpeg';
 import quiz from '../assets/rules/tech-quiz.png';
 import netiq from '../assets/rules/net-iq.png';
+import corporate_walk from '../assets/rules/corporate-walk.png'
 
 export const EVENTS_LIST = [
   { 
@@ -187,12 +188,12 @@ export const EVENTS_LIST = [
     minMembers: 6,
     maxMembers: 6,
     timing: "02:00 PM - 03:00 PM",
-    rulebook: "/assets/rules/corporate_walk.pdf",
-    contact: { phone: "", whatsapp: "" },
+    rulebook: corporate_walk,
+    contact: { phone: "+919655685144", whatsapp: "919655685144" },
     npc: { 
-      name: "Mr. Antony", 
+      name: "Mr. Shakthi", 
       role: "Event Head", 
-      avatar: IMAGES.NPCS.ANTONY, 
+      avatar: IMAGES.NPCS.SHAKTHI, 
       dialogue: "Time is money. Impress me in the next 30 seconds, or get out of my office." 
     }
   },
