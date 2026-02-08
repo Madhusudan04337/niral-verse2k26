@@ -11,6 +11,9 @@ export const EventZone: React.FC<{
    onBack: () => void 
 }> = ({ event, onEnterZone, onBack }) => {
 
+   // Helper to check if a valid link exists (not empty and not just placeholder if desired, though here we just check truthy)
+   const hasWhatsAppGroup = event.whatsappGroup && event.whatsappGroup.length > 0;
+
    return (
       <div className="relative w-full min-h-screen bg-black text-white">
          
@@ -62,26 +65,37 @@ export const EventZone: React.FC<{
                            <Target className="text-cyan-500" />
                            MISSION BRIEF
                         </h3>
-                        {/* Event Timing Badge */}
-                        <span className="inline-flex items-center gap-2 px-3 py-1 bg-cyan-950/50 border border-cyan-500/30 rounded text-cyan-400 text-xs font-mono whitespace-nowrap">
-                           <Clock size={14} />
-                           <span>T-MIN: {event.timing}</span>
-                        </span>
                      </div>
                      <p className="text-sm md:text-base text-gray-400 leading-relaxed mb-6">
                         {event.fullDesc}
                      </p>
 
-                     {/* Rulebook Download Button */}
-                     <a 
-                        href={event.rulebook}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 hover:border-orange-500 rounded transition-all group cursor-hover w-fit"
-                     >
-                        <FileText size={16} className="text-orange-400 group-hover:scale-110 transition-transform" />
-                        <span className="text-orange-400 text-xs font-bold font-mono uppercase tracking-widest">RULES</span>
-                     </a>
+                     {/* Action Buttons Row */}
+                     <div className="flex flex-wrap gap-4">
+                        {/* Rulebook Download Button */}
+                        <a 
+                           href={event.rulebook}
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 hover:border-orange-500 rounded transition-all group cursor-hover w-fit"
+                        >
+                           <FileText size={16} className="text-orange-400 group-hover:scale-110 transition-transform" />
+                           <span className="text-orange-400 text-xs font-bold font-mono uppercase tracking-widest">RULES</span>
+                        </a>
+
+                        {/* WhatsApp Group Join Button */}
+                        {hasWhatsAppGroup && (
+                            <a 
+                               href={event.whatsappGroup}
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 hover:border-green-500 rounded transition-all group cursor-hover w-fit"
+                            >
+                               <MessageCircle size={16} className="text-green-400 group-hover:scale-110 transition-transform" />
+                               <span className="text-green-400 text-xs font-bold font-mono uppercase tracking-widest">JOIN GROUP</span>
+                            </a>
+                        )}
+                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -139,7 +153,7 @@ export const EventZone: React.FC<{
                         className="w-full py-4 md:py-5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold font-orbitron uppercase tracking-widest rounded shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all flex items-center justify-center gap-3 transform hover:scale-[1.02] cursor-hover text-sm md:text-base"
                      >
                         <Zap size={20} className="fill-current" />
-                        <span>CLICK HERE TO REGISTER</span>
+                        <span>ACCEPT ASSIGNMENT</span>
                      </button>
                      <p className="text-center text-gray-500 text-[10px] md:text-xs mt-3 font-mono">
                         * SECURE CHANNEL ESTABLISHED. IMMEDIATE RESPONSE REQUIRED.
