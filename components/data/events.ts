@@ -143,7 +143,7 @@ export const EVENTS_LIST = [
     maxMembers: 2,
     rulebook: memes,
     whatsappGroup: "https://chat.whatsapp.com/KLPZMmJMkH28i4wG3OKQzs?mode=gi_t",
-    contact: { phone: "", whatsapp: "" },
+    contact: { phone: "+918825404569", whatsapp: "918825404569" },
     npc: { 
       name: "Mr. Sugin", 
       role: "Event Head", 
