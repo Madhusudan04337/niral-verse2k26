@@ -5,7 +5,7 @@ import {
 import { IMAGES } from '../assets/images';
 import bughunt from '../assets/rules/bughunt.png';
 import gamingzone from '../assets/rules/gamingzone.jpeg';
-import ui_ux from '../assets/rules/ui_ux.pdf';
+import ui_ux from '../assets/rules/ui_ux.jpeg';
 import poster from '../assets/rules/poster.png';
 import memes from '../assets/rules/memes.jpeg';
 import quiz from '../assets/rules/tech-quiz.png';
