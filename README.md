@@ -18,11 +18,19 @@ This application features a high-fidelity Sci-Fi/Cyberpunk aesthetic, leveraging
   - RPG-style "NPC" Event Heads with unique avatars and dialogue.
 - **Registration System**:
   - Dynamic forms handling both solo and team-based inputs.
-  - Validation for college details and duplicate emails.
+  - Client-side validation for college details.
 - **Cyberpunk UI/UX**:
   - Custom magnetic cursor with lag effects.
   - Film grain overlays.
   - Neon glow typography and glassmorphism design.
+
+## 📸 Screenshots
+
+*(Ensure these files are present in your assets folder)*
+
+| Welcome Screen | Command Deck |
+|:---:|:---:|
+| ![Welcome Screen](./components/assets/screenshots/welcome.jpeg) | ![Command Deck](./components/assets/screenshots/dashboard.png) |
 
 ## 🛠️ Tech Stack
 
@@ -31,7 +39,6 @@ This application features a high-fidelity Sci-Fi/Cyberpunk aesthetic, leveraging
 - **Animation**: [GSAP (GreenSock Animation Platform)](https://gsap.com/)
 - **Visuals**: [tsparticles](https://particles.js.org/) (Digital rain & starfields)
 - **Icons**: [Lucide React](https://lucide.dev/)
-- **Avatars**: [DiceBear Avatars](https://www.dicebear.com/)
 - **Fonts**: Orbitron & Share Tech Mono (Google Fonts)
 
 ## 📂 Project Structure
@@ -66,9 +73,29 @@ This application features a high-fidelity Sci-Fi/Cyberpunk aesthetic, leveraging
         └── CustomScrollbar.tsx
 ```
 
+## 🧠 Architecture Overview
+
+- **State Management**: `MainContent.tsx` acts as the central router, orchestrating the transition between the Command Deck, Cutscenes, and the Dashboard. It utilizes React State alongside Session Storage to persist the user's location during reloads.
+- **Data Driven**: All event protocols are centralized in `components/data/events.ts`. The UI components (`EventListItem`, `EventZone`, `NPCModal`) are agnostic and render dynamically based on this config file, allowing for easy updates to rules, images, and text.
+- **Component Isolation**: 
+  - **Modals**: Implemented as conditional overlays within the `DashboardSection` to ensure they sit above the 3D-transform layers.
+  - **Effects**: Particle engines and Grain overlays are isolated in their own components to prevent re-render performance hits on the main UI.
+
+## ⚡ Performance Optimizations
+
+Given the heavy use of animations, several strategies are employed:
+- **GSAP Context**: All animations use `gsap.context()` for proper cleanup in React `useEffect` hooks to prevent memory leaks.
+- **Particle Management**: `tsparticles` is configured with `detectRetina: false` and capped particle counts to maintain 60FPS on standard devices.
+- **Lazy Rendering**: The application uses conditional rendering to only mount heavy 3D dashboard components when the user actually enters the simulation, keeping the initial load light.
+
+## 🔐 Current Limitations
+
+- **Desktop First**: The interface is heavily optimized for mouse interaction (hover effects, custom cursors). While responsive, the full immersive experience is best viewed on a desktop/laptop.
+- **Client-Side Simulation**: The current registration forms are front-end simulations (`setTimeout`). They do not currently persist data to a backend database, serving as a UI/UX demonstration.
+
 ## 🚀 Usage
 
-This project utilizes **ES Modules** via CDN imports (`esm.sh`) defined in the `index.html` import map. This allows the application to run directly in modern browsers without a complex build step, though a local server is required to handle module loading.
+This project utilizes **ES Modules** via CDN imports (`esm.sh`) defined in the `index.html` import map. This allows the application to run directly in modern browsers without a complex build step.
 
 ### Running Locally
 
@@ -78,12 +105,6 @@ This project utilizes **ES Modules** via CDN imports (`esm.sh`) defined in the `
     *   *Using Node:* `npx serve .`
     *   *VS Code:* Use the "Live Server" extension.
 3.  Open `http://localhost:8000` in your browser.
-
-## 🎨 Customization
-
-- **Events Data**: To add, remove, or modify events, edit `components/data/events.ts`.
-- **Theme Colors**: Defined in `index.html` under the `tailwind.config` script block.
-- **Hero Content**: Institution details and countdown logic are located in `components/CommandDeckHero.tsx`.
 
 ## 🏆 Credits
 
