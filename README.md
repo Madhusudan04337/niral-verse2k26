@@ -30,7 +30,7 @@ This application features a high-fidelity Sci-Fi/Cyberpunk aesthetic, leveraging
 
 | Welcome Screen | Command Deck |
 |:---:|:---:|
-| ![Welcome Screen](./components/assets/screenshots/welcome.jpeg) | ![Command Deck](./components/assets/screenshots/dashboard.png) |
+| ![Welcome Screen](./components/assets/screenshots/welcome.jpeg) | ![Command Deck](./components/assets/screenshots/dashboard.jpeg) |
 
 ## 🛠️ Tech Stack
 
