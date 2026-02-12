@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Calendar, Cpu, Gamepad2, ArrowLeft
+  Calendar, Cpu, Gamepad2, ArrowLeft, FileText
 } from 'lucide-react';
 import { EVENTS_LIST } from '../data/events';
 import { CustomScrollbar } from '../ui/CustomScrollbar';
@@ -8,60 +8,88 @@ import { TravelSequence } from '../transitions/TravelSequence';
 import { NPCModal } from '../modals/NPCModal';
 import { RegistrationConfirmModal } from '../modals/RegistrationConfirmModal';
 import { RegistrationFormModal } from '../modals/RegistrationFormModal';
+import { GeneralGuidelinesModal } from '../modals/GeneralGuidelinesModal';
 import { EventZone } from '../events/EventZone';
 import { EventListItem } from '../events/EventListItem';
+import { IMAGES } from '../assets/images';
 
 export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBackToHome }) => {
   const [isTraveling, setIsTraveling] = useState(false);
   
-  // Initialize state from URL Params
+  // Persist Category Selection
   const [selectedCategory, setSelectedCategory] = useState<'Technical' | 'Non-Technical' | null>(() => {
-      const searchParams = new URLSearchParams(window.location.search);
-      return searchParams.get('category') as 'Technical' | 'Non-Technical' | null;
+      try {
+          return sessionStorage.getItem('niral_category') as 'Technical' | 'Non-Technical' | null;
+      } catch { return null; }
   });
 
+  // Persist Active Event
   const [activeEventId, setActiveEventId] = useState<string | null>(() => {
-      const searchParams = new URLSearchParams(window.location.search);
-      return searchParams.get('eventId');
+      try {
+          return sessionStorage.getItem('niral_event_id');
+      } catch { return null; }
   });
 
   const [showNpc, setShowNpc] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [showGuidelines, setShowGuidelines] = useState(false);
   
+  // Ref to track if we've done initial history reconstruction
+  const historyInitialized = useRef(false);
+
   const activeEvent = EVENTS_LIST.find(e => e.id === activeEventId);
   const filteredEvents = EVENTS_LIST.filter(e => e.category === selectedCategory);
 
-  // Update URL helper
-  const updateUrl = (cat: string | null, evtId: string | null) => {
-      const url = new URL(window.location.href);
-      url.searchParams.set('view', 'dashboard');
-      
-      if (cat) url.searchParams.set('category', cat);
-      else url.searchParams.delete('category');
-      
-      if (evtId) url.searchParams.set('eventId', evtId);
-      else url.searchParams.delete('eventId');
+  // --- HISTORY MANAGEMENT ---
 
-      window.history.pushState({}, '', url.toString());
-  };
-
-  // Sync state on PopState (Browser Back Button)
+  // 1. Reconstruct History on Mount (for Reloads)
   useEffect(() => {
-     const handlePopState = () => {
-        const searchParams = new URLSearchParams(window.location.search);
-        const cat = searchParams.get('category') as 'Technical' | 'Non-Technical' | null;
-        const evtId = searchParams.get('eventId');
+    if (historyInitialized.current) return;
+    historyInitialized.current = true;
+
+    // If we loaded deep into the app (e.g. Event View) but history state doesn't match
+    const currentState = window.history.state;
+    
+    // If we are at an Event, but history is missing or just 'dashboard'
+    if (activeEventId && (!currentState || !currentState.eventId)) {
+       // We need to inject the back stack: Dashboard -> Category -> Event
+       // Note: This is a bit hacky but prevents "Back" from exiting the app on reload
+       const cat = selectedCategory;
+       const evt = activeEventId;
+       
+       // Replace current with Root
+       window.history.replaceState({ view: 'dashboard' }, '');
+       // Push Category
+       if (cat) window.history.pushState({ view: 'dashboard', category: cat }, '');
+       // Push Event
+       if (evt) window.history.pushState({ view: 'dashboard', category: cat, eventId: evt }, '');
+    } 
+    else if (selectedCategory && (!currentState || !currentState.category)) {
+       const cat = selectedCategory;
+       window.history.replaceState({ view: 'dashboard' }, '');
+       window.history.pushState({ view: 'dashboard', category: cat }, '');
+    }
+  }, []); // Run once on mount
+
+  // 2. Handle Browser Back Button (PopState)
+  useEffect(() => {
+     const handlePopState = (event: PopStateEvent) => {
+        const state = event.state;
         
-        setSelectedCategory(cat);
-        setActiveEventId(evtId);
-        
-        // Reset modals on navigation
-        if (!evtId) {
+        // We only care if the state is related to 'dashboard'
+        // MainContent handles switching out of dashboard entirely
+        if (state && state.view === 'dashboard') {
+            // Sync local state with history state
+            setActiveEventId(state.eventId || null);
+            setSelectedCategory(state.category || null);
+            
+            // Close any open modals/overlays
             setIsTraveling(false);
             setShowNpc(false);
             setShowConfirm(false);
             setShowForm(false);
+            setShowGuidelines(false);
         }
      };
 
@@ -69,7 +97,7 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
      return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Update Session Storage (Secondary Backup)
+  // 3. Update Session Storage
   useEffect(() => {
     try {
         if (selectedCategory) sessionStorage.setItem('niral_category', selectedCategory);
@@ -85,13 +113,21 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
 
   const handleCategorySelect = (cat: 'Technical' | 'Non-Technical') => {
       setSelectedCategory(cat);
-      updateUrl(cat, null);
+      // Push History
+      window.history.pushState({ view: 'dashboard', category: cat }, '');
+  };
+
+  const handleBackToCategories = () => {
+      setSelectedCategory(null);
+      // Explicitly managing state to ensure consistent navigation
+      window.history.replaceState({ view: 'dashboard' }, '');
   };
 
   const handleEventClick = (eventId: string) => {
     setActiveEventId(eventId);
     setIsTraveling(true);
-    updateUrl(selectedCategory, eventId);
+    // Push History
+    window.history.pushState({ view: 'dashboard', category: selectedCategory, eventId: eventId }, '');
     
     // Reset all modal states
     setShowNpc(false); 
@@ -115,19 +151,6 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
   const handleConfirmYesLogic = () => {
      setShowConfirm(false);
      setShowForm(true);
-  };
-
-  const handleBackNavigation = () => {
-     if (showEventView) {
-         // Go back to Event List
-         window.history.back(); // PopState listener will handle state update
-     } else if (showListView) {
-         // Go back to Category Selection
-         window.history.back(); // PopState listener will handle state update
-     } else {
-         // Go back to Command Deck
-         onBackToHome();
-     }
   };
 
   const showEventView = activeEventId !== null && !isTraveling;
@@ -157,6 +180,10 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
     headerIconBorder = "border-blue-500/30";
   }
 
+  // Fallback images in case import fails or object is incomplete
+  const TECH_IMG = IMAGES?.CATEGORIES?.TECHNICAL || "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070";
+  const NON_TECH_IMG = IMAGES?.CATEGORIES?.NON_TECHNICAL || "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070";
+
   return (
     <div className="relative min-h-screen bg-[#050505] text-white selection:bg-blue-500/30">
        {/* Violet/Purple Background Gradient - Reduced Intensity -> Changed to Blue */}
@@ -165,6 +192,10 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
        {/* Overlays */}
        {isTraveling && <TravelSequence onComplete={handleTravelComplete} eventId={activeEventId} />}
        
+       {showGuidelines && (
+         <GeneralGuidelinesModal onClose={() => setShowGuidelines(false)} />
+       )}
+
        {showNpc && activeEvent && (
          <NPCModal 
            npc={activeEvent.npc} 
@@ -196,7 +227,11 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
              <EventZone 
                 event={activeEvent} 
                 onEnterZone={handleEnterZone} 
-                onBack={() => window.history.back()} 
+                onBack={() => {
+                   // Go back to list view
+                   setActiveEventId(null);
+                   window.history.back();
+                }} 
              />
           </div>
        ) : (
@@ -218,6 +253,7 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
                </div>
                
                <div className="flex items-center gap-4 shrink-0 pl-4">
+                   
                    {/* Encryption Status (visible only on desktop root view) */}
                    {!showListView && (
                      <div className="hidden md:flex items-center space-x-4 border-r border-white/10 pr-4 mr-2">
@@ -225,11 +261,32 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
                         <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
                      </div>
                    )}
+                   
+                   {/* Guidelines Button - Visible on Root Dashboard */}
+                   {!selectedCategory && !activeEventId && (
+                     <button 
+                        onClick={() => setShowGuidelines(true)}
+                        className="hidden md:flex items-center space-x-2 px-3 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded text-gray-300 hover:text-white transition-all cursor-hover group"
+                     >
+                        <FileText size={16} className="text-cyan-400 group-hover:scale-110 transition-transform" />
+                        <span className="text-xs font-mono uppercase tracking-widest">GUIDELINES</span>
+                     </button>
+                   )}
+                   
+                   {/* Mobile Guidelines Icon (Only visible on mobile root) */}
+                   {!selectedCategory && !activeEventId && (
+                     <button 
+                        onClick={() => setShowGuidelines(true)}
+                        className="md:hidden w-10 h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 border border-white/10 rounded text-gray-300 transition-all cursor-hover"
+                     >
+                        <FileText size={20} className="text-cyan-400" />
+                     </button>
+                   )}
 
                    {/* Back Button Logic */}
                    {showListView ? (
                        <button 
-                         onClick={() => window.history.back()}
+                         onClick={handleBackToCategories}
                          className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors cursor-hover"
                        >
                          <ArrowLeft size={20} />
@@ -260,7 +317,7 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
                      >
                         <div className="absolute inset-0 bg-gray-900/50 mix-blend-overlay">
                             <img 
-                              src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070" 
+                              src={TECH_IMG} 
                               alt="Technical Events" 
                               className="w-full h-full object-cover opacity-50 group-hover:scale-110 transition-transform duration-1000"
                            />
@@ -291,7 +348,7 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
                      >
                         <div className="absolute inset-0 bg-gray-900/50 mix-blend-overlay">
                            <img 
-                              src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070" 
+                              src={NON_TECH_IMG} 
                               alt="Non-Technical Events" 
                               className="w-full h-full object-cover opacity-50 group-hover:scale-110 transition-transform duration-1000"
                            />
