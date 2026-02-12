@@ -17,11 +17,15 @@ This application features a high-fidelity Sci-Fi/Cyberpunk aesthetic, leveraging
   - Detailed "Event Protocols" (descriptions, rules, team size).
   - RPG-style "NPC" Event Heads with unique avatars and dialogue.
   - **General Guidelines**: dedicated modal for event-wide rules and protocols.
-- **Registration Interface**:
+- **Live Registration System**:
+  - **Real-time Database**: Forms submit directly to a secure Google Sheet backend via Google Apps Script.
   - **Secure Verification**: Integration with **EmailJS** for OTP-based email validation.
   - **Instant Confirmation**: Automated HTML email dispatch containing team details, schedule, and Google Maps location upon successful registration.
-  - **Futuristic UI**: Interactive forms with validation states and cyber-aesthetic loading animations.
-  - **Context Aware**: Adapts content based on the selected event protocol.
+  - **Smart Validation**: 
+    - Prevents duplicate emails and phone numbers per event.
+    - Enforces unique Team Names (while allowing generic names for solo events).
+    - Auto-formatting (Capitalization, Upper-case Course names).
+  - **Dynamic Forms**: Adapts UI based on event type (Solo vs. Team).
 - **Cyberpunk UI/UX**:
   - Custom magnetic cursor with lag effects.
   - Film grain overlays.
@@ -56,6 +60,7 @@ This application features a high-fidelity Sci-Fi/Cyberpunk aesthetic, leveraging
 - **Animation**: [GSAP (GreenSock Animation Platform)](https://gsap.com/)
 - **Visuals**: [tsparticles](https://particles.js.org/) (Digital rain & starfields)
 - **Integrations**: [EmailJS](https://www.emailjs.com/) (Transactional Emails & OTP)
+- **Backend / Database**: Google Apps Script & Google Sheets
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **Fonts**: Orbitron & Share Tech Mono (Google Fonts)
 
@@ -85,7 +90,7 @@ This application features a high-fidelity Sci-Fi/Cyberpunk aesthetic, leveraging
     ├── modals/
     │   ├── GeneralGuidelinesModal.tsx # Event-wide rules modal
     │   ├── NPCModal.tsx        # Event Head interaction modal
-    │   ├── RegistrationFormModal.tsx  # Form logic with EmailJS integration
+    │   ├── RegistrationFormModal.tsx  # Form logic with API integration
     │   └── RegistrationConfirmModal.tsx
     ├── transitions/
     │   ├── ArrivalCutscene.tsx
@@ -109,10 +114,10 @@ Given the heavy use of animations, several strategies are employed:
 - **Particle Management**: `tsparticles` is configured with `detectRetina: false` and capped particle counts to maintain 60FPS on standard devices.
 - **Lazy Rendering**: The application uses conditional rendering to only mount heavy 3D dashboard components when the user actually enters the simulation, keeping the initial load light.
 
-## 🔐 Current Limitations
+## 🔐 Configuration Requirements
 
 - **Desktop First**: The interface is heavily optimized for mouse interaction (hover effects, custom cursors). While responsive, the full immersive experience is best viewed on a desktop/laptop.
-- **Environment Variables**: To enable the EmailJS features fully, a valid `SERVICE_ID`, `TEMPLATE_ID`, and `PUBLIC_KEY` must be configured in the registration component.
+- **Environment Variables**: To enable the live registration features fully, valid credentials (`SERVICE_ID`, `TEMPLATE_ID`, `PUBLIC_KEY`) must be configured for EmailJS and the Google Apps Script Web App URL must be set.
 
 ## 🚀 Usage
 
