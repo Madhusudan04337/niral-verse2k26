@@ -16,25 +16,38 @@ This application features a high-fidelity Sci-Fi/Cyberpunk aesthetic, leveraging
   - Categorized browsing (Technical vs. Non-Technical).
   - Detailed "Event Protocols" (descriptions, rules, team size).
   - RPG-style "NPC" Event Heads with unique avatars and dialogue.
-- **Live Registration System**:
-  - **Real-time Database**: Forms submit directly to a secure Google Sheet backend via Google Apps Script.
-  - **Smart Validation**: 
-    - Prevents duplicate emails and phone numbers per event.
-    - Enforces unique Team Names (while allowing generic names for solo events).
-    - Auto-formatting (Capitalization, Upper-case Course names).
-  - **Dynamic Forms**: Adapts UI based on event type (Solo vs. Team).
+  - **General Guidelines**: dedicated modal for event-wide rules and protocols.
+- **Registration Interface**:
+  - **Secure Verification**: Integration with **EmailJS** for OTP-based email validation.
+  - **Instant Confirmation**: Automated HTML email dispatch containing team details, schedule, and Google Maps location upon successful registration.
+  - **Futuristic UI**: Interactive forms with validation states and cyber-aesthetic loading animations.
+  - **Context Aware**: Adapts content based on the selected event protocol.
 - **Cyberpunk UI/UX**:
   - Custom magnetic cursor with lag effects.
   - Film grain overlays.
   - Neon glow typography and glassmorphism design.
 
-## 📸 Screenshots
+## 📸 Interface Gallery
 
-*(Ensure these files are present in your assets folder)*
+*(Ensure these files are present in your `/assets/screenshots/` folder)*
 
-| Welcome Screen | Command Deck |
+### 🌌 Core Experience
+| **1. Welcome Screen** | **2. Command Deck (HUD)** | **3. Category Selection** |
+|:---:|:---:|:---:|
+| ![Welcome Screen](./assets/screenshots/welcome.png) | ![Command Deck](./assets/screenshots/command-deck.png) | ![Categories](./assets/screenshots/categories.png) |
+| *Cinematic Entry* | *Main Hub & Countdown* | *Domain Selection* |
+
+### 🚀 Exploration Flow
+| **4. Protocol List** | **5. Travel Sequence** | **6. Mission Brief** |
+|:---:|:---:|:---:|
+| ![Event List](./assets/screenshots/event-list.png) | ![Loading](./assets/screenshots/travel-loading.png) | ![Event Details](./assets/screenshots/event-details.png) |
+| *Browsing Events* | *Hyperspace Transition* | *Detailed Event View* |
+
+### 🔐 Secure Registration
+| **7. OTP Verification** | **8. Email Confirmation** |
 |:---:|:---:|
-| ![Welcome Screen](./components/assets/screenshots/welcome.jpeg) | ![Command Deck](./components/assets/screenshots/dashboard.jpeg) |
+| ![OTP](./assets/screenshots/otp-verify.png) | ![Email](./assets/screenshots/email-success.png) |
+| *EmailJS OTP Validation* | *Automated Booking Ticket* |
 
 ## 🛠️ Tech Stack
 
@@ -42,8 +55,8 @@ This application features a high-fidelity Sci-Fi/Cyberpunk aesthetic, leveraging
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **Animation**: [GSAP (GreenSock Animation Platform)](https://gsap.com/)
 - **Visuals**: [tsparticles](https://particles.js.org/) (Digital rain & starfields)
+- **Integrations**: [EmailJS](https://www.emailjs.com/) (Transactional Emails & OTP)
 - **Icons**: [Lucide React](https://lucide.dev/)
-- **Backend / Database**: Google Apps Script & Google Sheets
 - **Fonts**: Orbitron & Share Tech Mono (Google Fonts)
 
 ## 📂 Project Structure
@@ -60,6 +73,8 @@ This application features a high-fidelity Sci-Fi/Cyberpunk aesthetic, leveraging
     ├── MainContent.tsx         # Logic for switching between views
     ├── ParticlesBackground.tsx # tsparticles configuration
     ├── UIEffects.tsx           # Custom cursor and grain overlay
+    ├── assets/
+    │   └── images.ts           # Centralized image asset configuration
     ├── data/
     │   └── events.ts           # Event data configuration (modify events here)
     ├── dashboard/
@@ -68,15 +83,14 @@ This application features a high-fidelity Sci-Fi/Cyberpunk aesthetic, leveraging
     │   ├── EventZone.tsx       # Individual event detail view
     │   └── EventListItem.tsx   # List item component
     ├── modals/
+    │   ├── GeneralGuidelinesModal.tsx # Event-wide rules modal
     │   ├── NPCModal.tsx        # Event Head interaction modal
-    │   ├── RegistrationFormModal.tsx  # Form logic with API integration
+    │   ├── RegistrationFormModal.tsx  # Form logic with EmailJS integration
     │   └── RegistrationConfirmModal.tsx
     ├── transitions/
     │   ├── ArrivalCutscene.tsx
     │   └── TravelSequence.tsx
     └── ui/
-        └── CustomScrollbar.tsx
-
         └── CustomScrollbar.tsx
 ```
 
@@ -98,7 +112,7 @@ Given the heavy use of animations, several strategies are employed:
 ## 🔐 Current Limitations
 
 - **Desktop First**: The interface is heavily optimized for mouse interaction (hover effects, custom cursors). While responsive, the full immersive experience is best viewed on a desktop/laptop.
-- **Client-Side Simulation**: The current registration forms are front-end simulations (`setTimeout`). They do not currently persist data to a backend database, serving as a UI/UX demonstration.
+- **Environment Variables**: To enable the EmailJS features fully, a valid `SERVICE_ID`, `TEMPLATE_ID`, and `PUBLIC_KEY` must be configured in the registration component.
 
 ## 🚀 Usage
 
