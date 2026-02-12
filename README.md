@@ -38,19 +38,19 @@ This application features a high-fidelity Sci-Fi/Cyberpunk aesthetic, leveraging
 ### 🌌 Core Experience
 | **1. Welcome Screen** | **2. Command Deck (HUD)** | **3. Category Selection** |
 |:---:|:---:|:---:|
-| ![Welcome Screen](./assets/screenshots/welcome.png) | ![Command Deck](./assets/screenshots/command-deck.png) | ![Categories](./assets/screenshots/categories.png) |
+| ![Welcome Screen](./components/assets/screenshots/welcome.jpeg) | ![Command Deck](./components/assets/screenshots/command-deck.jpeg) | ![Categories](./components/assets/screenshots/categories.png) |
 | *Cinematic Entry* | *Main Hub & Countdown* | *Domain Selection* |
 
 ### 🚀 Exploration Flow
 | **4. Protocol List** | **5. Travel Sequence** | **6. Mission Brief** |
 |:---:|:---:|:---:|
-| ![Event List](./assets/screenshots/event-list.png) | ![Loading](./assets/screenshots/travel-loading.png) | ![Event Details](./assets/screenshots/event-details.png) |
+| ![Event List](./components/assets/screenshots/event-list.png) | ![Loading](./components/assets/screenshots/travel-loading.png) | ![Event Details](./components/assets/screenshots/event-details.png) |
 | *Browsing Events* | *Hyperspace Transition* | *Detailed Event View* |
 
 ### 🔐 Secure Registration
 | **7. OTP Verification** | **8. Email Confirmation** |
 |:---:|:---:|
-| ![OTP](./assets/screenshots/otp-verify.png) | ![Email](./assets/screenshots/email-success.png) |
+| ![OTP](./components/assets/screenshots/otp-verify.png) | ![Email](./components/assets/screenshots/email-success.png) |
 | *EmailJS OTP Validation* | *Automated Booking Ticket* |
 
 ## 🛠️ Tech Stack
