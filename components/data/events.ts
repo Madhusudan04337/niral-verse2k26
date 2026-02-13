@@ -159,7 +159,7 @@ export const EVENTS_LIST = [
     color: "text-cyan-400", 
     border: "group-hover:border-cyan-500", 
     shadow: "group-hover:shadow-cyan-500/50", 
-    desc: "Combat simulation and tactical training.",
+    desc: "Combat simulation and tactical training. [FREE FIRE]",
     banner: IMAGES.BANNERS.GAMING,
     fullDesc: "Enter the arena. FPS, MOBA, and Battle Royale simulations to test your reflexes and strategic thinking.",
     minMembers: 4,
@@ -171,7 +171,7 @@ export const EVENTS_LIST = [
       name: "Mr. Viknesh", 
       role: "Event Head", 
       avatar: IMAGES.NPCS.VIKNESH, 
-      dialogue: "1v1 me, recruit. Let's see if your aim is as good as your talk." 
+      dialogue: "4v4 me, recruit. Let's see if your aim is as good as your talk." 
     }
   },
   { 
