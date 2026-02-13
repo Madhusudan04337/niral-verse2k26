@@ -93,7 +93,7 @@ export const EVENTS_LIST = [
     desc: "A fast-paced technical challenge combining logic, knowledge, and quick thinking.",
     banner: IMAGES.BANNERS.NETIQ,
     fullDesc: "NetIQ Challenge is a two-round competitive event featuring a QR-based crossword hunt followed by an MCQ battle. Teams must scan clues, solve technical terms accurately, and qualify for the final round. Speed, precision, and smart thinking will decide who tops the leaderboard.",
-    minMembers: 2,
+    minMembers: 1,
     maxMembers: 2,
     rulebook: netiq,
     whatsappGroup: "https://chat.whatsapp.com/DYJRhwX6fXk6hGL8YFaBMu?mode=gi_t",
