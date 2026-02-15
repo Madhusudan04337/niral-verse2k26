@@ -83,10 +83,6 @@ export const EventZone: React.FC<{
                            MISSION BRIEF
                         </h3>
                         {/* Event Timing Badge */}
-                        <span className="inline-flex items-center gap-2 px-3 py-1 bg-cyan-950/50 border border-cyan-500/30 rounded text-cyan-400 text-xs font-mono whitespace-nowrap">
-                           <Clock size={14} />
-                           <span>T-MIN: {event.timing}</span>
-                        </span>
                      </div>
                      <p className="text-sm md:text-base text-gray-400 leading-relaxed mb-6">
                         {event.fullDesc}
