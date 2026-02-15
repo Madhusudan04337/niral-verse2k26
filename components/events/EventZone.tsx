@@ -1,7 +1,8 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { 
   ArrowLeft, Clock, Target, FileText, Users, ShieldAlert, Zap, 
-  MessageCircle, Phone 
+  MessageCircle, Phone, Lock 
 } from 'lucide-react';
 import { EVENTS_LIST } from '../data/events';
 
@@ -13,6 +14,22 @@ export const EventZone: React.FC<{
 
    // Helper to check if a valid link exists (not empty and not just placeholder if desired, though here we just check truthy)
    const hasWhatsAppGroup = event.whatsappGroup && event.whatsappGroup.length > 0;
+
+   // Registration Deadline Logic
+   const [isRegistrationClosed, setIsRegistrationClosed] = useState(false);
+
+   useEffect(() => {
+     const checkTime = () => {
+       // Target: Feb 17, 2026 09:30:00 IST (+05:30)
+       const deadline = new Date('2026-02-17T09:30:00+05:30'); 
+       const now = new Date();
+       setIsRegistrationClosed(now > deadline);
+     };
+
+     checkTime();
+     const timer = setInterval(checkTime, 10000); // Check every 10 seconds
+     return () => clearInterval(timer);
+   }, []);
 
    return (
       <div className="relative w-full min-h-screen bg-black text-white">
@@ -65,6 +82,11 @@ export const EventZone: React.FC<{
                            <Target className="text-cyan-500" />
                            MISSION BRIEF
                         </h3>
+                        {/* Event Timing Badge */}
+                        <span className="inline-flex items-center gap-2 px-3 py-1 bg-cyan-950/50 border border-cyan-500/30 rounded text-cyan-400 text-xs font-mono whitespace-nowrap">
+                           <Clock size={14} />
+                           <span>T-MIN: {event.timing}</span>
+                        </span>
                      </div>
                      <p className="text-sm md:text-base text-gray-400 leading-relaxed mb-6">
                         {event.fullDesc}
@@ -149,14 +171,30 @@ export const EventZone: React.FC<{
                   {/* Bottom Registration Button */}
                   <div className="mt-8 pt-8 border-t border-white/10">
                      <button 
-                        onClick={onEnterZone}
-                        className="w-full py-4 md:py-5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold font-orbitron uppercase tracking-widest rounded shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all flex items-center justify-center gap-3 transform hover:scale-[1.02] cursor-hover text-sm md:text-base"
+                        onClick={isRegistrationClosed ? undefined : onEnterZone}
+                        disabled={isRegistrationClosed}
+                        className={`w-full py-4 md:py-5 font-bold font-orbitron uppercase tracking-widest rounded transition-all flex items-center justify-center gap-3 transform text-sm md:text-base ${
+                           isRegistrationClosed 
+                           ? 'bg-gray-800/50 border border-red-500/30 text-red-400 cursor-not-allowed' 
+                           : 'bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:scale-[1.02] cursor-hover'
+                        }`}
                      >
-                        <Zap size={20} className="fill-current" />
-                        <span>ACCEPT ASSIGNMENT</span>
+                        {isRegistrationClosed ? (
+                           <>
+                              <Lock size={20} />
+                              <span>REGISTRATION CLOSED</span>
+                           </>
+                        ) : (
+                           <>
+                              <Zap size={20} className="fill-current" />
+                              <span>ACCEPT ASSIGNMENT</span>
+                           </>
+                        )}
                      </button>
-                     <p className="text-center text-gray-500 text-[10px] md:text-xs mt-3 font-mono">
-                        * SECURE CHANNEL ESTABLISHED. IMMEDIATE RESPONSE REQUIRED.
+                     <p className={`text-center text-[10px] md:text-xs mt-3 font-mono ${isRegistrationClosed ? 'text-red-500/60' : 'text-gray-500'}`}>
+                        {isRegistrationClosed 
+                           ? "* PORTAL LOCKED. DEADLINE EXCEEDED." 
+                           : "* SECURE CHANNEL ESTABLISHED. IMMEDIATE RESPONSE REQUIRED."}
                      </p>
                   </div>
                </div>
@@ -197,3 +235,4 @@ export const EventZone: React.FC<{
       </div>
    );
 };
+    
