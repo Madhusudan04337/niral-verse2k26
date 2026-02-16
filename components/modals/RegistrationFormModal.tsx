@@ -18,10 +18,10 @@ interface MemberData {
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYD8LKwtndNDsfOQCbm7zo2VYmE6VALIEvparxmbGc_f2q2lL6ARt1swgGYiA6U3jfAw/exec";
 
 // EMAILJS CONFIG
-const EMAILJS_SERVICE_ID = "service_0r5787t";
-const EMAILJS_OTP_TEMPLATE_ID = "template_dl8fvcn";
-const EMAILJS_REG_TEMPLATE_ID = "template_0f0sytn";
-const EMAILJS_PUBLIC_KEY = "urCXzIu8mEl1xXFu1";
+const EMAILJS_SERVICE_ID = "service_xgdsfva";
+const EMAILJS_OTP_TEMPLATE_ID = "template_cgno07c";
+const EMAILJS_REG_TEMPLATE_ID = "template_4x1gopm";
+const EMAILJS_PUBLIC_KEY = "_0qZ-pF-WqI8_0NFk";
 
 export const RegistrationFormModal: React.FC<{
    event: typeof EVENTS_LIST[0];
