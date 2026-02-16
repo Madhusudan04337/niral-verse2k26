@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Calendar, Cpu, Gamepad2, ArrowLeft, FileText
+  Calendar, Cpu, Gamepad2, ArrowLeft, FileText, Lock, X
 } from 'lucide-react';
 import { EVENTS_LIST } from '../data/events';
 import { CustomScrollbar } from '../ui/CustomScrollbar';
@@ -34,6 +35,18 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
   const [showConfirm, setShowConfirm] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [showGuidelines, setShowGuidelines] = useState(false);
+  
+  // Registration Closed Popup Logic
+  const [showClosedPopup, setShowClosedPopup] = useState(false);
+  
+  useEffect(() => {
+     // Check if current time is past 17th Feb 2026, 9:30 AM
+     const deadline = new Date('2026-02-16T14:30:00+05:30'); 
+     const now = new Date();
+     if (now > deadline) {
+        setShowClosedPopup(true);
+     }
+  }, []);
   
   // Ref to track if we've done initial history reconstruction
   const historyInitialized = useRef(false);
@@ -218,6 +231,53 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
                 event={activeEvent}
                 onClose={() => setShowForm(false)}
              />
+         </div>
+       )}
+
+       {/* Registration Closed Popup */}
+       {showClosedPopup && (
+         <div className="fixed inset-0 z-[900] flex items-center justify-center p-4 animate-in fade-in zoom-in duration-500">
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={() => setShowClosedPopup(false)} />
+            
+            <div className="glass-panel relative w-full max-w-md p-8 bg-gray-900 rounded-xl border border-red-500/30 text-center shadow-[0_0_50px_rgba(220,38,38,0.2)]">
+               {/* Close Button */}
+               <button 
+                  onClick={() => setShowClosedPopup(false)}
+                  className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors cursor-hover"
+               >
+                  <X size={20} />
+               </button>
+               
+               <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-500/30 text-red-500">
+                  <Lock size={32} />
+               </div>
+               
+               <h3 className="text-2xl font-orbitron font-bold text-white mb-2 tracking-wider">
+                  REGISTRATION CLOSED
+               </h3>
+               
+               <div className="space-y-4 font-mono text-sm text-gray-300 leading-relaxed mt-4">
+                  <p className="text-red-400 font-bold">
+                     ONLINE PORTAL LOCKED
+                  </p>
+                  <div className="bg-white/5 p-4 rounded border border-white/10">
+                     <p className="text-cyan-400 font-bold mb-1">ON-SPOT REGISTRATION AVAILABLE</p>
+                     <p className="text-xs text-gray-400">
+                        Please report to the registration desk at the venue.
+                     </p>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                     For any queries, please contact the event coordinator.
+                  </p>
+               </div>
+
+               <button 
+                  onClick={() => setShowClosedPopup(false)}
+                  className="mt-8 px-8 py-3 bg-red-600/20 hover:bg-red-600/30 border border-red-500/50 text-red-400 font-bold rounded font-mono uppercase text-xs tracking-widest transition-all w-full hover:shadow-[0_0_20px_rgba(220,38,38,0.2)] cursor-hover"
+               >
+                  ACKNOWLEDGE
+               </button>
+            </div>
          </div>
        )}
 

@@ -21,7 +21,7 @@ export const EventZone: React.FC<{
    useEffect(() => {
      const checkTime = () => {
        // Target: Feb 17, 2026 09:30:00 IST (+05:30)
-       const deadline = new Date('2026-02-17T09:30:00+05:30'); 
+       const deadline = new Date('2026-02-16T13:30:00+05:30'); 
        const now = new Date();
        setIsRegistrationClosed(now > deadline);
      };
