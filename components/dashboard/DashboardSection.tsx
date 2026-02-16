@@ -41,7 +41,7 @@ export const DashboardSection: React.FC<{ onBackToHome: () => void }> = ({ onBac
   
   useEffect(() => {
      // Check if current time is past 17th Feb 2026, 9:30 AM
-     const deadline = new Date('2026-02-16T14:30:00+05:30'); 
+     const deadline = new Date('2026-02-16T14:00:00+05:30'); 
      const now = new Date();
      if (now > deadline) {
         setShowClosedPopup(true);
